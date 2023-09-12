@@ -6,6 +6,11 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventCategory
         fields = ['id', 'name']
+
+class BuildingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = accounts.Building
+        fields = ['id', 'name', 'type','get_type_display']
 class EventsSerializer(serializers.ModelSerializer):
     start_date = serializers.DateTimeField(format=datetime_format)
     end_date = serializers.DateTimeField(format=datetime_format)

@@ -7,4 +7,5 @@ urlpatterns = [
     path(r'users/', UsersViewSet.as_view()),
     path(r'profile/', ProfileViewSet.as_view()),
     path(r'profile/<int:pk>/', ProfileViewSet.as_view()),
+    path(r'buildings/', BuildingViewSet.as_view()),
 ]

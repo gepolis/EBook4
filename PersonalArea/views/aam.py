@@ -13,25 +13,7 @@ import xlsxwriter
 
 @decorators.is_admin_or_methodist
 def events_list(request, search=None):
-    if request.user.role == "methodist":
-        categories = EventCategory.objects.all().filter(methodists=request.user)
-        events = Events.objects.all().filter(archive=False, category__in=categories).order_by("-id")
-    elif request.user.role == "head_teacher":
-        events = Events.objects.all().filter(archive=False, building=request.user.building).order_by("-id")
-    else:
-        events = Events.objects.all().filter(archive=False).order_by("-id")
-    context = {
-        "count_events": events.count(),
-        "count_requests": EventsMembers.objects.all().filter(is_active=False, volunteers__in=events).count(),
-        "section": "events"
-    }
-    paginator = Paginator(events, settings.ITEMS_FOR_PAGE)
-    page_number = request.GET.get("page")
-    if page_number is None:
-        page_number = 1
-    page_obj = paginator.get_page(page_number)
-    context["events"] = page_obj
-    return render(request, "aam/events_list.html", context)
+    return render(request, "aam/events_list.html", {"section": "events"})
 
 
 @decorators.is_admin_or_methodist

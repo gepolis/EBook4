@@ -35,3 +35,21 @@ class IsAdmin(BasePermission):
             if request.type == 'GET':
                 return True
         return False
+
+
+class IsStaff(BasePermission):
+    message = "Access Denied!"
+    def has_permission(self, request, view):
+        user = get_user_by_token(request)
+        if user:
+            if user.role in ["admin", "director", "head_teacher","methodist","teacher","psychologist"]:
+                return True
+        return False
+
+
+    def has_object_permission(self, request, view, obj):
+        user = get_user_by_token(request)
+        if user:
+            if user.role in ["admin", "director", "head_teacher", "methodist", "teacher", "psychologist"]:
+                return True
+        return False

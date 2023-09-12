@@ -9,7 +9,7 @@
                     <li class="nav-item"><a class="nav-link" href="/lk/settings"><i
                             class="bx bx-user me-1"></i>Основное</a></li>
                     <li class="nav-item"><a class="nav-link" href="/lk/settings/security/change-password"><i
-                            class="bx bx-bell me-1"></i>Пароль</a></li>
+                            class="bx bx-bell me-1"></i>Безопасность</a></li>
                     <li class="nav-item"><a class="nav-link" href="/lk/settings/security/devices"><i
                             class="bx bx-link-alt me-1"></i>Устройства</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/lk/settings/linking/mosru"><i
@@ -20,7 +20,7 @@
             <div class="bg-light rounded h-100 p-4">
                 <h6 class="mb-4">Привязка аккаунта МЭШ</h6>
                 {% if not linked %}
-                <form method="post">
+                    <form method="post">
                         {% csrf_token %}
                         {{ form|crispy }}
                         <br>
@@ -32,4 +32,5 @@
             </div>
         </div>
     </div>
+
 {% endblock content %}
