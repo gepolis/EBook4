@@ -8,7 +8,7 @@ const modal = document.getElementById("exampleModal")
 const loader = document.getElementById("modal_loader")
 const modal_data = document.getElementById("information")
 const modal_footer = document.getElementById("modal_footer")
-const url = `${window.location.protocol}//${window.location.host}/lk/users/data/`
+const url = `${window.location.protocol}//${window.location.host}/api/profile/`
 let interv = null;
 console.log(url)
 

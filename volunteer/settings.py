@@ -7,12 +7,17 @@ SECRET_KEY = '!DqvOUY=kWjhkaNi2m~Jb12,)=66b=E65jISNn-9s{i5YxUU]9LKvbW;iDso2OmXp-
 
 ALLOWED_HOSTS = ["*"]
 
+BUILDINGS_PARALELS = {
+    1: ["М", "Л"],
+    2: ["А", "Б", "В"],
+    3: ["Д" "Е", "Р"],
+    4: ["З", "И", "К", "С"],
+    5: ["Г", "Ю"],
+    6: ["Н", "О"]
+}
+
 DEBUG = True
 SERV = True
-if os.getenv("SERV") is None:
-    SERV = False
-if os.getenv("DEBUG") is None:
-    DEBUG = False
 
 LOGIN_URL = "/auth/"
 LOGOUT_REDIRECT_URL = None
@@ -42,8 +47,20 @@ INSTALLED_APPS = [
     'ChatBot',
     'whitenoise.runserver_nostatic',
     'django_user_agents',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2
 
+}
 
 # Name of cache backend to cache user agents. If it not specified default
 # cache alias will be used. Set to `None` to disable caching.
@@ -53,12 +70,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-'django_user_agents.middleware.UserAgentMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'volunteer.urls'
@@ -164,19 +181,11 @@ CHANNEL_LAYERS = {
 }
 ITEMS_FOR_PAGE = 25
 
-
-REDIS_HOST = '0.0.0.0'
-REDIS_PORT = 6379
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'ivanaksenov2010@mail.ru'
 EMAIL_HOST_PASSWORD = 'SeZcYwzd9pxJX2As9niV'
 EMAIL_USE_SSL = True
+TELEGRAM_BOT_API_KEY = "6401267881:AAF_xGubtGnpd011M3V-RAii1iYoigoEk8c"
+BOT_CHAT_ID = "-921384300"

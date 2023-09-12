@@ -74,5 +74,8 @@ urlpatterns = [
     path("settings/security/devices/", views.other.devices, name="security"),
     path("settings/security/devices/delete/<str:device>", views.other.delete_device, name="delete_device"),
     path("settings/linking/mosru", views.other.settings_linking_mosru, name="settings_linking_mosru"),
+    path("feedbacks/", views.developer.feedbacks, name="feedbacks"),
+    path("feedbacks/<int:fb_id>", views.developer.view_feedback, name="view_feedback"),
+    path("feedbacks/<int:fb_id>/send", views.developer.send_feedback_answer, name="send_feedback_answer"),
 # path("classroom/student/<int:user>/delete", views.classroom_delete_student),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

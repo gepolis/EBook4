@@ -20,7 +20,7 @@ import io
 import xlsxwriter
 import pandas as pd
 from PersonalArea.models import Notications, Message
-
+from Accounts.views import get_or_generate_token
 
 @decorators.is_admin
 def login_admin_user(request, user):
@@ -28,7 +28,10 @@ def login_admin_user(request, user):
         logout(request)
         user = get_object_or_404(Account, pk=user)
         login(request, user)
-        return redirect("/lk/")
+        r =  redirect("/lk/")
+        token = get_or_generate_token(request)
+        r.set_cookie('token', token)
+        return r
 
 
 @decorators.is_admin

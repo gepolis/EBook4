@@ -9,15 +9,20 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.conf import settings
 from django.utils import timezone
-
 from .models import Account
 from .forms import *
 from .models import *
 from .utils import get_token
 from MainApp.models import ClassRoom
+from rest_framework.authtoken.models import Token
 
 
+def get_or_generate_token(request):
+    token, created = Token.objects.get_or_create(user=request.user)
+
+    return token.key
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -53,9 +58,12 @@ def register_request(request):
             login(request, user)
             add_connection(request)
             messages.success(request, 'Вы успешно зарегистрировались!')
-            return redirect("/lk/")
+            r = redirect("/lk/")
+            r.set_cookie("token", get_or_generate_token(request))
+            return r
         else:
             messages.success(request, f'Ошибка({form.errors})!')
+
             return redirect("/auth/?m=reg")
     else:
         return HttpResponse("m")
@@ -95,7 +103,7 @@ def auth_mos_ru(request):
                 return mos_ru_login(request, token)
             else:
                 messages.error(request, "Неверный логин или пароль.")
-                return render(request, "mos_ru_auth.html", context=context)
+                return render(request, "mos_ru_auth.html", context=context).set_cookie("token", get_or_generate_token(request))
         else:
             return HttpResponse("f")
 
@@ -116,19 +124,29 @@ def mos_ru_login(request, token):
             login(request, auth_user)
 
             if user.type == "student":
-                class_room_user = user.class_name.split("-")
-                classroom = ClassRoom.objects.all().filter(parallel=class_room_user[1],
-                                                           classroom=int(class_room_user[0]))
+                classroom_number, classroom_paralell = user.class_name.split("-")
+                building = None
+                for key, value in settings.BUILDINGS_PARALELS.items():
+                    print(key, type(value))
+                    if classroom_paralell in value:
+                        auth_user.building = Building.objects.get(pk=key)
+                        auth_user.save()
+                        break
+                    
+                classroom_number = int(classroom_number)
+
+                classroom = ClassRoom.objects.all().filter(parallel=classroom_paralell,
+                                                           classroom=classroom_number)
                 if classroom.exists():
                     classroom = classroom.first()
                     classroom.member.add(auth_user)
                 else:
-                    classroom = ClassRoom(parallel=class_room_user[1], classroom=int(class_room_user[0]))
+                    classroom = ClassRoom(parallel=classroom_paralell, classroom=classroom_number)
                     classroom.save()
                     classroom.member.add(auth_user)
                     classroom.save()
                 c = redirect("/lk/")
-                c.set_cookie("token", token, max_age=86400 * 38)  # 38 дней
+                c.set_cookie("token", get_or_generate_token(request))
                 return c
 
         else:
@@ -156,7 +174,9 @@ def login_request(request):
                 else:
                     add_connection(request)
                 messages.success(request, 'Вы успешно вошли!')
-                return redirect("/lk/")
+                r = redirect("/lk/")
+                r.set_cookie("token", get_or_generate_token(request))
+                return r
             else:
                 messages.warning(request, "Пользователь не найден.")
         else:

@@ -94,6 +94,9 @@ class Events(models.Model):
 
     volunteer = models.ManyToManyField(EventsMembers, related_name="volunteers", blank=True)
 
+    def volunteer_count(self):
+        return self.volunteer.count()
+
     class Meta:
         verbose_name = "Мероприятие"
         verbose_name_plural = "Мероприятия"
@@ -162,6 +165,7 @@ class PsychologistSchedule(models.Model):
         else:
             return True
 
+
 class TeacherInviteEvent(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="account")
     classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, related_name="event_classroom")
@@ -170,3 +174,14 @@ class TeacherInviteEvent(models.Model):
     class Meta:
         verbose_name = "Приглашение на мероприятие"
         verbose_name_plural = "Приглашения на мероприятия"
+
+
+class FeedBackQuestions(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    message = models.TextField(max_length=2550)
+    answer = models.TextField(max_length=2550, null=True, blank=True)
+
+    def __str__(self):
+        return self.name

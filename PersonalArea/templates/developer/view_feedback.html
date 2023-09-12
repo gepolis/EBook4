@@ -1,0 +1,59 @@
+{% extends "inc/base.html" %}
+{% block content %}
+
+    <!-- Sales Chart Start -->
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-12 col-xl-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h6 class="mb-4">Вопрос от {{ fb.name }}
+                    </h6>
+                    {{ fb.message }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-12 col-xl-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h6 class="mb-4">Ваш ответ
+                    </h6>
+                    <div class="col">
+                        <button class="btn btn-secondary" title="Здравствуйте" onclick="typeInTextarea('Здравствуйте, {{ fb.name }}, ')"><i
+                                class="fa fa-h"></i></button>
+                        <button class="btn btn-secondary" title="С уважением" onclick="typeInTextarea('С уважением, {{ user.full_name }}! ')"><i
+                                class="fa fa-b"></i></button>
+                        <button class="btn btn-secondary" title="https://school1236.ru/" onclick="typeInTextarea('https://school1236.ru/')"><i class="fa fa-link"></i></button>
+                    </div>
+                    <form action="{{ fb.pk }}/send" method="post">
+                        <textarea name="answer" cols="30" rows="10" class="form-control" id="answer"></textarea>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sales Chart End -->
+    <script>
+        function typeInTextarea(new_text) {
+            var curPos =
+                document.getElementById("answer").selectionStart;
+            console.log(curPos);
+            let x = $("#answer").val();
+            let text_to_insert = new_text;
+            $("#answer").val(
+                x.slice(0, curPos) + text_to_insert + x.slice(curPos));
+            let end = curPos + text_to_insert.length
+            document.getElementById("answer").setSelectionRange(end, end);
+            document.getElementById("answer").focus();
+
+        }
+
+    </script>
+
+{% endblock content %}

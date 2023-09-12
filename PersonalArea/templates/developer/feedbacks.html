@@ -1,0 +1,60 @@
+{% extends "inc/base.html" %}
+{% block content %}
+
+    <!-- Sales Chart Start -->
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-12 col-xl-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h6 class="mb-4">Вопросы
+                    </h6>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Автор</th>
+                            <th scope="col">Почта</th>
+                            <th scope="col">Телефон</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for fb in fbs %}
+                            <tr>
+
+                                <td>
+                                    <a href="{{ fb.pk }}">{{ fb.name }}</a>
+                                </td>
+                                <td>
+                                    {{ fb.email }}
+                                </td>
+                                <td>
+                                    {{ fb.phone }}
+                                </td>
+                                <!--<td>
+                                <a class="btn btn-primary"  href="/lk/users/{{user.id}}/view"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-primary" href="/lk/users/{{user.id}}/edit"><i class="fa fa-user-edit"></i></a>
+                            </td>-->
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item {% if not events.has_previous %}disabled{% endif %}">
+                                <a class="page-link"
+                                   href="?page={% if events.has_previous %}{{ events.previous_page_number }}{% endif %}"
+                                   tabindex="-1">&laquo;</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">{{ events.number }}</a></li>
+                            <li class="page-item {% if not events.has_next %}disabled{% endif %}">
+                                <a class="page-link" href="?page={% if events.has_next %}{{ events.next_page_number }}{% endif %}">&raquo;</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sales Chart End -->
+
+
+{% endblock content %}
