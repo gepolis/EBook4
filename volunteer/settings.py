@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'storages',
     'channels',
     'ChatBot',
-    'Api',
     'whitenoise.runserver_nostatic',
     'django_user_agents',
     'rest_framework',
