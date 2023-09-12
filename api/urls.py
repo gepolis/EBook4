@@ -1,5 +1,5 @@
 from django.urls import path, include
-from API import views
+from api import views
 
 
 urlpatterns = [
