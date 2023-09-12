@@ -16,7 +16,7 @@ BUILDINGS_PARALELS = {
     6: ["Н", "О"]
 }
 
-DEBUG = True
+DEBUG = False
 SERV = True
 
 LOGIN_URL = "/auth/"
