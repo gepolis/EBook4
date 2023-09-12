@@ -30,7 +30,7 @@ urlpatterns = [
                   path('chatbot/', include("ChatBot.urls")),
                   path("user_activity/", accounts_views.user_activity),
                   path("feedback/", views.feedback),
-                  path('api/', include('apit.urls')),
+                  path('api/', include('api.urls')),
                   path('api-token-auth/', rest_framework_views.obtain_auth_token, name='api-token-auth'),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
