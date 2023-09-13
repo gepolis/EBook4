@@ -36,9 +36,8 @@ def get_logs(request):
     if settings.SERV:
         lines = []
         logs = ""
-        if os.path.exists("/Ebook1/nohup.out"):
-            with open("/Ebook1/nohup.out", "r") as f:
-                lines = f.readlines()
-            logs = "<br>".join(lines)
-            return render(request, "developer/logs.html", {"section": "logs", "logs": logs})
+        with open("/Ebook1/nohup.out", "r") as f:
+            lines = f.readlines()
+        logs = "<br>".join(lines)
+        return render(request, "developer/logs.html", {"section": "logs", "logs": logs})
     return redirect("/lk/")
