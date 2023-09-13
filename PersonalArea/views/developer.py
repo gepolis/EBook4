@@ -42,6 +42,9 @@ def get_logs(request):
         "403": "red",
         "404": "red",
         "500": "darkred",
+        'HTTP': "black",
+        '304': "red", # 304 - Not Modified
+        'Not Found': "darkred",
     }
     if True:
         lines = []
