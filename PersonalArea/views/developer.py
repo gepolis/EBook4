@@ -33,11 +33,23 @@ def send_feedback_answer(request, fb_id):
 
 @decorators.is_developer
 def get_logs(request):
+    el_col = {
+        "GET": "green",
+        "POST": "skyblue",
+        "200": "green",
+        "301": "red",
+        "302": "red",
+        "403": "red",
+        "404": "red",
+        "500": "darkred",
+    }
     if True:
         lines = []
         logs = ""
         with open("/root/Ebook1/nohup.out", "r") as f:
             lines = f.readlines()
         logs = "<br>".join(lines)
+        for i in el_col:
+            logs = logs.replace(i, f"<span style='color: {el_col[i]}'>{i}</span>")
         return render(request, "developer/logs.html", {"section": "logs", "logs": logs})
     return redirect("/lk/")
