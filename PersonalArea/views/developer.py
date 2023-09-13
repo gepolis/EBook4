@@ -36,7 +36,7 @@ def get_logs(request):
     if True:
         lines = []
         logs = ""
-        with open("/Ebook1/nohup.out", "r") as f:
+        with open("/root/Ebook1/nohup.out", "r") as f:
             lines = f.readlines()
         logs = "<br>".join(lines)
         return render(request, "developer/logs.html", {"section": "logs", "logs": logs})
