@@ -33,7 +33,7 @@ def send_feedback_answer(request, fb_id):
 
 @decorators.is_developer
 def get_logs(request):
-    if settings.SERV:
+    if True:
         lines = []
         logs = ""
         with open("/Ebook1/nohup.out", "r") as f:
