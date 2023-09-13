@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load qcount %}
 <html lang="ru">
 
 <head>
@@ -173,47 +174,61 @@
                     {% block sidebar %}
                     {% endblock sidebar %}
                 {% endif %}
-            <!--<a href="/lk/chat/" class="nav-item nav-link {% if section == "chat" %}active{% endif %}"><i
+                {% if user.is_developer %}
+                    <hr>
+                    <a href="/lk/feedbacks/"
+                       class="nav-item nav-link {% if section == "feedbacks" %}active{% endif %}"><i
+                            class="fa fa-question-circle me-2"></i>Вопросы {% if qc != 0 %}
+                        <span class="badge bg-danger">{% questions_count %}</span>{% endif %}</a>
+
+                    <a href="/lk/feedbacks/archive"
+                       class="nav-item nav-link {% if section == "archive" %}active{% endif %}"><i
+                            class="fa fa-archive me-2"></i>Архив</a>
+                    <a href="/lk/logs"
+                       class="nav-item nav-link {% if section == "logs" %}active{% endif %}"><i
+                            class="fa fa-file-text me-2"></i>Логи</a>
+                {% endif %}
+                <!--<a href="/lk/chat/" class="nav-item nav-link {% if section == "chat" %}active{% endif %}"><i
                     class="fas fa-paper-plane me-2"></i>Чат</a>-->
+            </div>
+        </nav>
     </div>
-    </nav>
-</div>
-<!-- Sidebar End -->
+    <!-- Sidebar End -->
 
 
-<!-- Content Start -->
-<div class="content">
-    <!-- Navbar Start -->
-    {% include 'inc/admin_menu.html' %}
-    <!-- Navbar End -->
-    <div class="container-fluid pt-4 px-4">
-        {% if messages %}
-            <ul class="messagelist">
-                {% for message in messages %}
-                    {% if message.tags == "error" %}
-                        <div class="alert alert-danger" role="alert">{{ message.message }}</div>
-                    {% else %}
-                        <div class="alert alert-{{ message.tags }}" role="alert">{{ message.message }}</div>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        {% endif %}
+    <!-- Content Start -->
+    <div class="content">
+        <!-- Navbar Start -->
+        {% include 'inc/admin_menu.html' %}
+        <!-- Navbar End -->
+        <div class="container-fluid pt-4 px-4">
+            {% if messages %}
+                <ul class="messagelist">
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                            <div class="alert alert-danger" role="alert">{{ message.message }}</div>
+                        {% else %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">{{ message.message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        {% block content %}
+
+        {% endblock content %}
+
+
+        <!-- Footer Start -->
+        <!-- Footer End -->
     </div>
-    {% block content %}
-
-    {% endblock content %}
+    <!-- Content End -->
 
 
-    <!-- Footer Start -->
-    <!-- Footer End -->
-</div>
-<!-- Content End -->
+    <!-- Back to Top -->
 
 
-<!-- Back to Top -->
-
-
-<!--<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>-->
+    <!--<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>-->
 </div>
 
 

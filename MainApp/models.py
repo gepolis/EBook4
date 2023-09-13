@@ -182,6 +182,10 @@ class FeedBackQuestions(models.Model):
     phone = models.CharField(max_length=255)
     message = models.TextField(max_length=2550)
     answer = models.TextField(max_length=2550, null=True, blank=True)
+    answer_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="answer_by", null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    answered_at = models.DateTimeField(null=True)
+
 
     def __str__(self):
         return self.name

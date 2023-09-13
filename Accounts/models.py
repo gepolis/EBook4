@@ -85,6 +85,7 @@ class Account(AbstractBaseUser):
     token = models.CharField(max_length=1000, null=True)
     peculiarity = models.CharField(max_length=1000, null=True, choices=PECULARITY_CHOICE, blank=True)
     two_auth = models.CharField(max_length=1000, null=True, blank=True, choices=TWO_AUTH_CHOICES)
+    is_developer = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', "second_name", "first_name", "middle_name"]
 

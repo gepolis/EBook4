@@ -144,3 +144,16 @@ def is_school_administrator(view_func):
             return redirect("auth")
 
     return wrapper
+
+def is_developer(view_func):
+    @functools.wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if request.user.is_developer:
+                return view_func(request, *args, **kwargs)
+            else:
+                raise PermissionDenied
+        else:
+            return redirect("auth")
+
+    return wrapper
