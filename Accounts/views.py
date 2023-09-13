@@ -59,7 +59,7 @@ def register_request(request):
             add_connection(request)
             messages.success(request, 'Вы успешно зарегистрировались!')
             r = redirect("/lk/")
-            r.set_cookie("token", get_or_generate_token(request))
+            r.set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
             return r
         else:
             messages.success(request, f'Ошибка({form.errors})!')
@@ -103,7 +103,7 @@ def auth_mos_ru(request):
                 return mos_ru_login(request, token)
             else:
                 messages.error(request, "Неверный логин или пароль.")
-                return render(request, "mos_ru_auth.html", context=context).set_cookie("token", get_or_generate_token(request))
+                return render(request, "mos_ru_auth.html", context=context).set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
         else:
             return HttpResponse("f")
 
@@ -146,7 +146,7 @@ def mos_ru_login(request, token):
                     classroom.member.add(auth_user)
                     classroom.save()
                 c = redirect("/lk/")
-                c.set_cookie("token", get_or_generate_token(request))
+                c.set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
                 return c
 
         else:
@@ -175,7 +175,7 @@ def login_request(request):
                     add_connection(request)
                 messages.success(request, 'Вы успешно вошли!')
                 r = redirect("/lk/")
-                r.set_cookie("token", get_or_generate_token(request))
+                r.set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
                 return r
             else:
                 messages.warning(request, "Пользователь не найден.")
