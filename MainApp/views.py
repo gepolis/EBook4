@@ -25,7 +25,7 @@ def feedback(request):
             phone=phone,
             message=message
         )
-        text = f"Имя: {name}\nEmail: {email}\nТелефон: {phone}\nСообщение: {message}\n\nВопрос от {email}"
+        text = f"Имя: {name}\nEmail: {email}\nТелефон: {phone}\nСообщение: {message}\n\nВопрос от {email}\n\n#feedback"
         r = requests.get(f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_API_KEY}/sendMessage?chat_id={settings.BOT_CHAT_ID}&text={text}")
         print(r.url)
         print(r.text)

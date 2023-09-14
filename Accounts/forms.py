@@ -21,7 +21,7 @@ class NewUserForm(UserCreationForm):
         }
         widgets = {
             'date_of_birth': forms.DateInput(attrs={"type": "date"}),
-            'username': forms.TextInput(attrs={'onclick': "check_form_valid()"}),
+            'username': forms.TextInput(attrs={'onkeydown': "check_form_valid()"}),
             'role': forms.HiddenInput(),
         }
 

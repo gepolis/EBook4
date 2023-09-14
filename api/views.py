@@ -12,7 +12,7 @@ from .serializers import *
 from .permissions import IsAdmin, IsStaff
 
 
-def pagination_queryset(request, queryset, items_per_page=1):
+def pagination_queryset(request, queryset, items_per_page=25):
     page = request.GET.get('page')
     if page:
         page = int(page)

@@ -80,7 +80,7 @@
                                 {{ register_form|crispy }}
                                 <br>
                                 <button type="button" class="btn btn-primary py-3 w-100 mb-4 pb-3"
-                                        onclick="register_next()" id="next-step-button" disabled>Далее &rightarrow;
+                                        onclick="register_next()" id="next-step-button">Далее &rightarrow;
                                 </button>
                                 <button type="submit" class="btn btn-primary py-3 w-100 mb-4 pb-3" id="button"
                                         style="display: none">
@@ -160,13 +160,6 @@
         register_tab.classList.remove("active");
         login_tab.classList.add("active");
         console.log("login")
-    }
-    const check_form_valid = () => {
-        if (register_start.checkValidity()) {
-            button_next.removeAttribute("disabled")
-        } else {
-            button_next.setAttribute('disabled', '');
-        }
     }
 </script>
 <!-- JavaScript Libraries -->

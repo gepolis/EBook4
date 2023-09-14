@@ -46,7 +46,6 @@ def add_connection(request):
 
 
 def register_request(request):
-    add_connection(request)
     if request.user.is_authenticated:
         return redirect("/lk/")
 
