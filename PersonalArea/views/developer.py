@@ -49,7 +49,7 @@ def get_logs(request):
         "403": "red",
         "404": "red",
         "500": "darkred",
-        'HTTP': "#ADD8E6",
+        'HTTP': "#CEACE6",
         '304': "red",  # 304 - Not Modified
 
     }
