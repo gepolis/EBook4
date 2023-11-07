@@ -37,23 +37,7 @@ def give_points(request, id):
 
 @decorators.is_admin_or_methodist
 def events_archive_list(request):
-    if request.user.role == "methodist":
-        categories = EventCategory.objects.all().filter(methodists=request.user)
-        events = Events.objects.all().filter(archive=True, category__in=categories).order_by("-id")
-    else:
-        events = Events.objects.all().filter(archive=True).order_by("-id")
-    context = {
-        "count_events": events.count(),
-        "count_requests": EventsMembers.objects.all().filter(is_active=True, volunteers__in=events).count(),
-        "section": "events"
-    }
-    paginator = Paginator(events, settings.ITEMS_FOR_PAGE)  # Show 25 contacts per page.
-    page_number = request.GET.get("page")
-    if page_number is None:
-        page_number = 1
-    page_obj = paginator.get_page(page_number)
-    context["events"] = page_obj
-    return render(request, "aam/events_archive_list.html", context)
+    return render(request, "aam/events_archive_list.html", {"section": "events"})
 
 
 @decorators.is_admin_or_methodist

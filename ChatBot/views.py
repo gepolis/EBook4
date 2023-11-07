@@ -2,7 +2,6 @@ import asyncio
 import random
 import time
 from time import sleep
-import httpx
 import requests
 from django.http import HttpResponse, JsonResponse
 import json

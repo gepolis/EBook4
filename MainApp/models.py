@@ -10,7 +10,6 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 Account = "Accounts.account"
-from multiselectfield import MultiSelectField
 import uuid
 
 
@@ -182,6 +181,7 @@ class FeedBackQuestions(models.Model):
     phone = models.CharField(max_length=255)
     message = models.TextField(max_length=2550)
     answer = models.TextField(max_length=2550, null=True, blank=True)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="user", null=True)
     answer_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="answer_by", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     answered_at = models.DateTimeField(null=True)

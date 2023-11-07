@@ -1,7 +1,54 @@
 {% extends "inc/base.html" %}
 {% load static %}
 {% block content %}
+    <style>
+        .fa .fa-star {
+            color: #777777;
+        }
+
+        .fa-star:hover {
+            color: #ff9933;
+        }
+
+        .fa-star.active {
+            color: #ff9933;
+        }
+    </style>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+                let stars = document.querySelectorAll(".fa-star")
+                let hidden = document.querySelector("#hidden-rating")
+
+                function activate(ev) {
+                    let star = parseInt(ev.target.dataset.star)
+                    hidden.value=star
+                    stars.forEach((eve) => {
+                            if (parseInt(eve.dataset.star) <= star) {
+                                eve.classList.add("active")
+                            } else {
+                                eve.classList.remove("active")
+                            }
+                        }
+                    )
+                }
+
+                stars.forEach((e) => {
+                    console.log(e)
+                    e.addEventListener("click", activate)
+                })
+            }
+        )
+    </script>
     <div class="container-fluid pt-4 px-4">
+        <!--<div id="rating">
+            <i data-star="1" class="fa fa-2x fa-star active"></i>
+            <i data-star="2" class="fa fa-2x fa-star"></i>
+            <i data-star="3" class="fa fa-2x fa-star"></i>
+            <i data-star="4" class="fa fa-2x fa-star"></i>
+            <i data-star="5" class="fa fa-2x fa-star"></i>
+            <input type="hidden" id="hidden-rating">
+        </div>-->
         <div class="row g-4">
             <div class="col-sm-6 col-xl-3">
                 <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
@@ -100,7 +147,7 @@
     </div>
     <script src="{% static 'js/api.js' %}"></script>
     <script>
-        apiFetch("events",'').then((data) => {
+        apiFetch("events", '').then((data) => {
             console.info(data)
         })
     </script>

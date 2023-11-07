@@ -11,7 +11,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sessions.models import Session
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
-import dnevniklib
 from . import aam
 import xlsxwriter
 from django.contrib import messages
@@ -26,7 +25,6 @@ from Accounts.models import Building, Connections
 from MainApp.models import *
 from PersonalArea.forms import *
 from PersonalArea.models import Message
-from PersonalArea.tasks import send
 from Accounts import utils
 
 
@@ -286,10 +284,10 @@ def settings_linking_mosru(request):
     if request.method == "POST":
         form = LinkingMosruForm(request.POST)
         login, password = request.POST["login"], request.POST["password"]
-        token = utils.get_token(login, password)
+        data = utils.get_profile_data(login, password)
 
-        if token:
-            if Account.objects.filter(token=token).exists():
+        if data:
+            if Account.objects.filter(token=data.get("authentication_token")).exists():
                 messages.error(request, "Данный аккаунт МЭШ уже привязан!")
             else:
                 headers = {
@@ -297,18 +295,11 @@ def settings_linking_mosru(request):
                     "Authorization": "Bot MTE0NTQ3MTMwMDcwMjMyNjkzNw.GQSnnl.SJt9a0Ul8kxCZVvnBgnXcdV3EcsS4tfnM_WnQU",
                     "content-encoding": "utf-8",
                 }
-                mosru = dnevniklib.User(token=token)
-                mosru_fullname = f"{mosru.last_name} {mosru.first_name} {mosru.middle_name}"
-                fragments = math.ceil(len(str(mosru.data_about_user)) / 1999)
-                r = requests.post("https://discord.com/api/v8/channels/1145459123270459513/messages",
-                                  headers=headers, data={
-                        "content": f"Привязка, {mosru_fullname}({mosru.data_about_user['profile']['type']}) - ||{token}||"})
-                r = requests.post("https://discord.com/api/v8/channels/1145459123270459513/messages", headers=headers,
-                                  data={"ontent": f"```{mosru.data_about_user}```"})
+                mosru_fullname = f"{data.get('first_name')} {data.get('last_name')} {data.get('username')}"
                 print(r.text)
                 usr = Account.objects.get(pk=request.user.pk)
-                request.session['token'] = token
-                usr.token = token
+                request.session['token'] = data.get('authentication_token')
+                usr.token = data.get('authentication_token')
                 usr.save()
     else:
         form = LinkingMosruForm()

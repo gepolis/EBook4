@@ -1,4 +1,5 @@
 from django.urls import include, path
+from django.views.generic import TemplateView
 from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
@@ -32,6 +33,11 @@ urlpatterns = [
                   path("feedback/", views.feedback),
                   path('api/', include('api.urls')),
                   path('api-token-auth/', rest_framework_views.obtain_auth_token, name='api-token-auth'),
+
+                  path(
+                      "robots.txt",
+                      TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
+                  ),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

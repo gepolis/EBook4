@@ -9,6 +9,8 @@ def questions_count():
     c = FeedBackQuestions.objects.all().filter(answer__isnull=True).count()
     if c == 0:
         return '0'
+    if c >= 100:
+        return "99+"
     if c >= 10:
         return "9+"
     return f"{c}"

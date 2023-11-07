@@ -80,5 +80,9 @@ urlpatterns = [
     path("feedbacks/<int:fb_id>", views.developer.view_feedback, name="view_feedback"),
     path("feedbacks/<int:fb_id>/send", views.developer.send_feedback_answer, name="send_feedback_answer"),
     path("logs/", views.developer.get_logs, name="logs"),
+    path("drag/", views.developer.drag, name="drag"),
+
+    path("personalisation/locations", views.personalisation.locations, name="personalisation"),
+    path("personalisation/location/<int:id>", views.personalisation.location, name="location"),
 # path("classroom/student/<int:user>/delete", views.classroom_delete_student),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

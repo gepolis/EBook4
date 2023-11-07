@@ -17,7 +17,7 @@ BUILDINGS_PARALELS = {
 }
 
 DEBUG = True
-SERV = True
+SERV = False
 
 LOGIN_URL = "/auth/"
 LOGOUT_REDIRECT_URL = None
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken'
 ]
+APPEND_SLASH=False
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',

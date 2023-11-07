@@ -2,7 +2,7 @@ import random
 from datetime import datetime
 
 import django_user_agents.utils
-import dnevniklib
+import requests
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import *
 from django.contrib.auth.forms import AuthenticationForm
@@ -14,7 +14,7 @@ from django.utils import timezone
 from .models import Account
 from .forms import *
 from .models import *
-from .utils import get_token
+from .utils import get_profile_data
 from MainApp.models import ClassRoom
 from rest_framework.authtoken.models import Token
 
@@ -97,9 +97,10 @@ def auth_mos_ru(request):
         context = {"login_form": form}
         if form.is_valid():
             # print(form.cleaned_data)
-            token = get_token(form.cleaned_data["login"], form.cleaned_data['password'])
-            if token:
-                return mos_ru_login(request, token)
+            data = get_profile_data(form.cleaned_data["login"], form.cleaned_data['password'])
+
+            if data:
+                return mos_ru_login(request, data)
             else:
                 messages.error(request, "Неверный логин или пароль.")
                 return render(request, "mos_ru_auth.html", context=context).set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
@@ -107,23 +108,30 @@ def auth_mos_ru(request):
             return HttpResponse("f")
 
 
-def mos_ru_login(request, token):
-    user = dnevniklib.User(token=token)
-    school = dnevniklib.School(user=user)
+def mos_ru_login(request, data):
+    fn = data.get("profile").get("first_name")
+    ln = data.get("profile").get("last_name")
+    mn = data.get("profile").get("middle_name")
+    email = data.get("profile").get("email")
+    date_of_birth = data.get("profile").get("birth_date")
+    dob = date_of_birth.split("-")
+    date_of_birth = datetime(int(dob[0]), int(dob[1]), int(dob[2]))
+    classroom_number, classroom_paralell = data.get("children")[0].get('class_name').split("-")
+    role = data.get("profile").get("type")
+    school = data.get("children")[0].get("school").get("short_name")
     # print(user.data_about_user)
-    if school.get_info_about_school()['short_name'] == "ГБОУ Школа № 1236":
-        if not Account.objects.all().filter(email=user.email).exists():
+    if school == "ГБОУ Школа № 1236":
+        if not Account.objects.all().filter(email=email).exists():
 
             username = f"user_{Account.objects.all().count()}"
-            auth_user = Account(email=user.email, username=username, first_name=user.first_name,
-                                second_name=user.last_name, middle_name=user.middle_name,
-                                role=user.data_about_user['profile']['type'],
-                                date_of_birth=user.data_about_user['profile']['birth_date'], password="mos.ru")
+            auth_user = Account(email=email, username=username, first_name=fn,
+                                second_name=ln, middle_name=mn,
+                                role=role,
+                                date_of_birth=date_of_birth, password="mos.ru")
             auth_user.save()
             login(request, auth_user)
 
-            if user.type == "student":
-                classroom_number, classroom_paralell = user.class_name.split("-")
+            if role == "student":
                 building = None
                 for key, value in settings.BUILDINGS_PARALELS.items():
                     print(key, type(value))
@@ -149,10 +157,10 @@ def mos_ru_login(request, token):
                 return c
 
         else:
-            auth_user = Account.objects.get(email=user.email)
+            auth_user = Account.objects.get(email=email)
             login(request, auth_user)
         return redirect("/lk/")
-    return HttpResponse(user.data_about_user)
+    return HttpResponse(data)
 
 
 def login_request(request):

@@ -1,5 +1,6 @@
 import time
 
+import requests
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium import webdriver
@@ -27,11 +28,11 @@ if settings.SERV:
     options.add_argument("--no-sandbox")
     options.add_argument("-disable-dev-shm-usage")
 options.add_argument("--disable-blink-features=AutomationControlled")
-selpath = "/home/vanua/PycharmProjects/django/VolunteerE-book/chromedriver"
+selpath = "/home/gepolis/Desktop/Ebook3Back/Accounts/chromedriver"
 if settings.SERV:
     selpath = "/root/Ebook1/Accounts/chromedriver"
 
-def get_token(user_login, user_password):
+def get_profile_data(user_login, user_password):
     start = datetime.datetime.now()
     driver = webdriver.Chrome(options=options,
                               service=Service(
@@ -66,13 +67,24 @@ def get_token(user_login, user_password):
         time.sleep(1)
     if not state:
         token = driver.get_cookie("aupd_token")
+        print(token)
         if token:
             token = token['value']
+            data = requests.get(
+                "https://school.mos.ru/api/family/web/v1/profile",
+                headers={
+                    "Authorization": f"{token}",
+                    "Auth-Token": f"{token}",
+                    "User-Agent": user_agent,
+                    "X-mes-subsystem": "familyweb",
+                }
+            )
+            data = data.json()
+            print(data)
+            driver.close()
         else:
-            token = False
-        driver.get(
-            "https://login.mos.ru/sps/login/logout?post_logout_redirect_uri=https://www.mos.ru/api/acs/v1/logout"
-            "/satisfy")
-        return token
+            data = False
+
+        return data
     else:
         return False

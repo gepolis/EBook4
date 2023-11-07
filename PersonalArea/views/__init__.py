@@ -6,3 +6,4 @@ from . import teacher
 from . import psychologist
 from . import administration
 from . import developer
+from . import personalisation
