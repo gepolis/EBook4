@@ -37,12 +37,12 @@ def login_admin_user(request, user):
 @decorators.is_admin
 def user_create(request):
     if request.method == "GET":
-        return redirect("/lk/users/list")
+        return redirect("/lk/users/list/")
     else:
         form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save(commit=True)
-        return redirect("/lk/users/list")
+        return redirect("/lk/users/list/")
     return render(request, "adminpanel/user_create.html", {"form": form})
 
 @decorators.is_admin
