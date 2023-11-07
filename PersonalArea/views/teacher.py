@@ -62,11 +62,11 @@ def update_invite(request):
 def invite_classroom_event(request, id):
     if ClassRoom.objects.all().filter(teacher=request.user).exists():
         classroom = ClassRoom.objects.get(teacher=request.user)
-        events = Events.objects.get(pk=id)
+        event = Events.objects.get(pk=id)
         for member in classroom.member.all():
-            i = TeacherInviteEvent(user=member, classroom=classroom, event=events)
-            i.save()
-        messages.success(request, "Вы успешно пригласили класс на мероприятие.")
+            vol = EventsMembers(user=member, is_active=True).save()
+            event.volunteer.add(vol)
+        messages.success(request, "Вы успешно класс класс на мероприятие.")
         return redirect("/lk/events/")
     else:
         return redirect("/lk/classroom/create/")
