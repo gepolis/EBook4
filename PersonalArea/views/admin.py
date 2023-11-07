@@ -49,7 +49,7 @@ def user_create(request):
 def user_delete(request, id):
     user = get_object_or_404(Account, pk=id)
     user.delete()
-    return redirect("/lk/users/list")
+    return redirect("/lk/users/list/")
 @decorators.is_admin
 def event_add_user(request, id, user):
     user = Account.objects.get(id=user)
@@ -57,7 +57,7 @@ def event_add_user(request, id, user):
     user.save()
     event = Events.objects.get(pk=id)
     event.volunteer.add(user)
-    return redirect(f"/lk/events/{id}/view")
+    return redirect(f"/lk/events/{id}/view/")
 
 
 @decorators.is_admin
