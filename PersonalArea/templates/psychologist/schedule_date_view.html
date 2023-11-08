@@ -168,6 +168,7 @@
                 console.log(e.target.dataset)
                 let pk = e.target.dataset.pk
                 editpk.innerText = pk
+                console.log(editpk)
                 next_button(false)
                 await calendar_update()
             })
@@ -214,7 +215,9 @@
                 next_button(true)
             } else {
                 let form = document.querySelector("form")
-                let final_data = `?date=${date_field}&start=${classesStartTime.value}&end=${classesEndTime.value}&id=${editpk.innerText}`
+                let pk = editpk.innerText
+
+                let final_data = `?date=${date_field}&start=${classesStartTime.value}&end=${classesEndTime.value}&id=${pk}`
 
                 window.open(`/lk/schedule/edit${final_data}`, "_self")
             }

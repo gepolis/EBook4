@@ -144,6 +144,7 @@ def mos_ru_login(request, data):
 
                 classroom = ClassRoom.objects.all().filter(parallel=classroom_paralell,
                                                            classroom=classroom_number)
+                print(classroom.exists())
                 if classroom.exists():
                     classroom = classroom.first()
                     classroom.member.add(auth_user)
@@ -152,6 +153,7 @@ def mos_ru_login(request, data):
                     classroom.save()
                     classroom.member.add(auth_user)
                     classroom.save()
+                    print(classroom.pk)
                 c = redirect("/lk/")
                 c.set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
                 return c
