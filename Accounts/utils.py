@@ -80,6 +80,7 @@ def get_profile_data(user_login, user_password):
                 }
             )
             data = data.json()
+            data["token"] = token
             print(data)
             driver.close()
         else:

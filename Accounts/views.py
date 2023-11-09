@@ -124,7 +124,8 @@ def mos_ru_login(request, data):
     date_of_birth = datetime(int(dob[0]), int(dob[1]), int(dob[2]))
     classroom_number, classroom_paralell = data.get("children")[0].get('class_name').split("-")
     role = data.get("profile").get("type")
-    school = data.get("children")[0].get("school").get("short_name")
+    school = data.get("children")[0].get("school").get("short_name")hj
+    token = data.get("token")
     # print(user.data_about_user)
     if school == "ГБОУ Школа № 1236":
         if not Account.objects.all().filter(email=email).exists():
@@ -133,7 +134,7 @@ def mos_ru_login(request, data):
             auth_user = Account(email=email, username=username, first_name=fn,
                                 second_name=ln, middle_name=mn,
                                 role=role,
-                                date_of_birth=date_of_birth, password="mos.ru")
+                                date_of_birth=date_of_birth, password="mos.ru",token=data.get("token"))
             auth_user.save()
             login(request, auth_user)
 
