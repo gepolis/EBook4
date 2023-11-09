@@ -141,8 +141,9 @@ def mos_ru_login(request, data):
             if role == "student":
                 building = None
                 for key, value in settings.BUILDINGS_PARALELS.items():
-                    print(key, type(value))
+                    print(key, value)
                     if classroom_paralell in value:
+                        print(value)
                         auth_user.building = Building.objects.get(pk=key)
                         auth_user.save()
                         break

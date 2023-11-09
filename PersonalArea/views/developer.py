@@ -67,7 +67,7 @@ def get_logs(request):
     lines = []
     logs = ""
     with open("/root/Ebook1/nohup.out", "r") as f:
-        lines = f.readlines()
+        lines = f.readlines()[-100:] # last 100 lines
     logs = "<br>".join(lines)
 
     for i in el_col:
