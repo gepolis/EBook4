@@ -111,6 +111,12 @@
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#createUserModal">
                                     <i class="fa fa-plus"></i>
+
+                                </button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#KeysModal">
+                                    <i class="fa fa-key"></i>
+
                                 </button>
                             </div>
                         </div>
@@ -150,8 +156,10 @@
                                        href="#"
                                        tabindex="-1" id="prevPageBtn">&laquo;</a>
                                 </li>
-                                <li class="page-item"><input min="1" disabled class="page-link" id="page" placeholder="1"
-                                                             style="width: 48px; text-align: center;" type="number"></li>
+                                <li class="page-item"><input min="1" disabled class="page-link" id="page"
+                                                             placeholder="1"
+                                                             style="width: 48px; text-align: center;" type="number">
+                                </li>
                                 <li class="page-item" id="nextPage">
                                     <a class="page-link" href="#" id="nextPageBtn">&raquo;</a>
                                 </li>
@@ -216,6 +224,39 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                         <button type="submit" class="btn btn-primary">Создать</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="KeysModal" tabindex="-1" aria-labelledby="KeysModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Коды подтверждения</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'create_user' %}">
+                    <div class="modal-body">
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Роль</th>
+                                <th scope="col">Код подтверждения</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for k in ks %}
+                                <tr>
+                                    <td>{{ k.name }}</td>
+                                    <td>{{ k.password }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </form>
             </div>
@@ -375,8 +416,8 @@
             prev.classList.add("disabled")
             next.classList.add("disabled")
             apiFetch("users/" + get).then((data) => {
-                users_data.style.display=""
-                users_spinner.style.display="none"
+                users_data.style.display = ""
+                users_spinner.style.display = "none"
                 staff_count.innerText = data['statictic']['staff']
                 all_users.innerText = data['statictic']['all']
                 parents_count.innerText = data['statictic']['parents']

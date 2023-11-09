@@ -190,3 +190,12 @@ EMAIL_HOST_PASSWORD = 'SeZcYwzd9pxJX2As9niV'
 EMAIL_USE_SSL = True
 TELEGRAM_BOT_API_KEY = "6401267881:AAF_xGubtGnpd011M3V-RAii1iYoigoEk8c"
 BOT_CHAT_ID = "-1001720102680"
+
+ROLES_PASSWORDS = {
+    "admin": "lJ4I393R",
+    "director": "Hklu7QLH",
+    "head_teacher": "IUi90tP",
+    "teacher": "V6y7Jc",
+    "psychologist": "7m8n9p",
+    "methodist": "K3T7Jc",
+}

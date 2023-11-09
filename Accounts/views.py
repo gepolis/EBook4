@@ -52,7 +52,13 @@ def register_request(request):
     elif request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
+            print(settings.ROLES_PASSWORDS.get(request.POST.get("role")), request.POST.get("code"))
+            if settings.ROLES_PASSWORDS.get(request.POST.get("role")) != request.POST.get("code"):
+                messages.error(request, "Неверный код подтверждения!")
+
+                return redirect("/auth/?m=reg")
             user = form.save()
+            user.role = request.POST.get("role")
             user.save()
             login(request, user)
             add_connection(request)
@@ -199,7 +205,7 @@ def logout_request(request):
     Connections.objects.all().filter(user=request.user, session_key=request.session.session_key).delete()
     logout(request)
     messages.success(request, "Вы успешно вышли!")
-    c = redirect("/login")
+    c = redirect("/")
     c.set_cookie("token", "", max_age=0)
     return c
 

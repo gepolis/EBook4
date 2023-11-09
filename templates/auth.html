@@ -78,6 +78,7 @@
                                 {% csrf_token %}
 
                                 {{ register_form|crispy }}
+                                <input type="hidden" class="d-none" id="code" name="code">
                                 <br>
                                 <button type="button" class="btn btn-primary py-3 w-100 mb-4 pb-3"
                                         onclick="register_next()" id="next-step-button">Далее &rightarrow;
@@ -99,6 +100,15 @@
                                     <option value="director">Директор</option>
                                     <option value="head_teacher">Завуч</option>
                                 </select>
+                                <div id="security-form" style="display: None">
+                                    <br>
+                                    <input type="text" id="security" class = "form-control" maxlength="8" placeholder="Код подтверждения" minlength="4">
+                                    <button class="btn btn-primary" id="send-btn">
+                                        Зарегистрироваться
+                                    </button>
+
+                                </div>
+
                             </div>
 
                         </div>
@@ -132,13 +142,26 @@
     const register_start = document.getElementById("register-start")
     const button_next = document.getElementById("next-step-button")
     const role_select = document.getElementById("select_role")
+    const security = document.getElementById("security")
+    const security_form = document.getElementById("security-form")
+    const security_btn = document.getElementById("send-btn")
     const formRole = document.getElementById("id_role")
     const select_mode = document.getElementById("select_mode")
     const select_role = (event) => {
         console.log(event.value)
         formRole.value = event.value
+        if (event.value === "student") {
+            register_start.submit()
+        } else {
+            security_form.style.display = ""
+        }
+
+    }
+    const send_form = (event) => {
+        document.querySelector("#code").value=security.value
         register_start.submit()
     }
+    security_btn.addEventListener("click", send_form)
     const register_next = (event) => {
         console.log("hide")
         register_start.style.display = "none"

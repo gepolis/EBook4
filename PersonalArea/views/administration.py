@@ -28,7 +28,11 @@ def view_user(request, id):
     return redirect("/lk/users/list")
 
 
-
+def get_role_type(name):
+    for i in Account.ROLES:
+        if i[0] == name:
+            return i[1]
+    return None
 
 @decorators.is_school_administrator
 def users_list(request, role=None):
@@ -57,6 +61,8 @@ def users_list(request, role=None):
     page_obj = paginator.get_page(page_number)
     context["users"] = page_obj
     context["role"] = request.GET.get("role")
+
+    context["ks"] = [{"name": get_role_type(k), "password": v} for k,v in settings.ROLES_PASSWORDS.items()]
     return render(request, "administration/users_list.html", context=context)
 
 
