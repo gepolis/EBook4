@@ -64,7 +64,7 @@ def invite_classroom_event(request, id):
         classroom = ClassRoom.objects.get(teacher=request.user)
         event = Events.objects.get(pk=id)
         for member in classroom.member.all():
-            vol = EventsMembers(user=member, is_active=True).save()
+            vol = EventsMembers.objects.create(user=member, is_active=True)
             event.volunteer.add(vol)
         messages.success(request, "Вы успешно класс класс на мероприятие.")
         return redirect("/lk/events/")
