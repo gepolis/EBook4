@@ -66,7 +66,7 @@ def invite_classroom_event(request, id):
         for member in classroom.member.all():
             vol = EventsMembers.objects.create(user=member, is_active=True)
             event.volunteer.add(vol)
-        messages.success(request, "Вы успешно класс класс на мероприятие.")
+        messages.success(request, "Вы успешно пригласили класс на мероприятие.")
         return redirect("/lk/events/")
     else:
         return redirect("/lk/classroom/create/")

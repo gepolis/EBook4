@@ -16,7 +16,7 @@
         <div class="bg-light rounded h-100 p-4">
             <div class="row">
                 <div class="col-sm col-sm-8">
-                    <h6 class="mb-4">Пользователи</h6>
+                    <h6 class="mb-4">Мероприятия</h6>
                 </div>
                 <div class="col-sm col-sm-4">
                     <select id="role-filter" onchange="building_filter(this)" class="form-control">
@@ -46,7 +46,7 @@
                                 Начало: {{ event.start_date }}<br>
                                 Конец: {{ event.end_date }}
                                 </p>
-                                <!--<a href="/lk/events/{{ event.pk }}/invite" class="btn btn-primary">Пригласить</a>-->
+                                <a href="/lk/events/{{ event.pk }}/invite" class="btn btn-primary">Пригласить</a>
                             </div>
                         </div>
                     </div>
