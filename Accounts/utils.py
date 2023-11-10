@@ -11,7 +11,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import Accounts.models
 from django.conf import settings
-from django.conf import settings
 ua = UserAgent()
 user_agent = ua.ff
 options = webdriver.ChromeOptions()
@@ -30,9 +29,10 @@ if settings.SERV:
 options.add_argument("--disable-blink-features=AutomationControlled")
 selpath = "/home/gepolis/PycharmProjects/EBook4/Accounts/chromedriver"
 if settings.SERV:
-    selpath = "/root/Ebook1/Accounts/chromedriver"
+    selpath = "/root/Ebook1/chromedriver"
 
 print(selpath)
+print("-----------")
 def get_profile_data(user_login, user_password):
     start = datetime.datetime.now()
     driver = webdriver.Chrome(options=options,
