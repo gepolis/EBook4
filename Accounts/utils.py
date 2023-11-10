@@ -28,7 +28,7 @@ if settings.SERV:
     options.add_argument("--no-sandbox")
     options.add_argument("-disable-dev-shm-usage")
 options.add_argument("--disable-blink-features=AutomationControlled")
-selpath = "/home/gepolis/Desktop/Ebook3Back/Accounts/chromedriver"
+selpath = "/home/gepolis/PycharmProjects/EBook4/Accounts/chromedriver"
 if settings.SERV:
     selpath = "/root/Ebook1/Accounts/chromedriver"
 

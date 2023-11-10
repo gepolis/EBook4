@@ -115,6 +115,7 @@ def auth_mos_ru(request):
 
 
 def mos_ru_login(request, data):
+    print(data)
     fn = data.get("profile").get("first_name")
     ln = data.get("profile").get("last_name")
     mn = data.get("profile").get("middle_name")
