@@ -59,6 +59,8 @@ def get_profile_data(user_login, user_password):
     timer = 10
     while state:
         if timer == 0:
+            print("time out")
+            print(driver.current_url)
             break
         if driver.current_url == "https://school.mos.ru/auth/callback":
             state = False

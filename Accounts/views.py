@@ -109,7 +109,9 @@ def auth_mos_ru(request):
                 return mos_ru_login(request, data)
             else:
                 messages.error(request, "Неверный логин или пароль.")
-                return render(request, "mos_ru_auth.html", context=context).set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
+                req = render(request, "mos_ru_auth.html", context=context)
+                return req
+
         else:
             return HttpResponse("f")
 
