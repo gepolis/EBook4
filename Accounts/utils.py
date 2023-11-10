@@ -32,6 +32,7 @@ selpath = "/home/gepolis/PycharmProjects/EBook4/Accounts/chromedriver"
 if settings.SERV:
     selpath = "/root/Ebook1/Accounts/chromedriver"
 
+print(selpath)
 def get_profile_data(user_login, user_password):
     start = datetime.datetime.now()
     driver = webdriver.Chrome(options=options,
