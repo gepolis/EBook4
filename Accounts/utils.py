@@ -56,7 +56,7 @@ def get_profile_data(user_login, user_password):
     password.send_keys(user_password)
     button.click()
     state = True
-    timer = 10
+    timer = 15
     while state:
         if timer == 0:
             print("time out")
