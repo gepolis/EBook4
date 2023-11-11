@@ -56,14 +56,7 @@
                     </div>
 
                     <div class="pt-3">
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ login_form|crispy }}
-                            <br>
-                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4 pb-3" id="button">Войти
-                            </button>
-                            <p class="text-center"><a href="/auth/mosru/info">Как это работает?</a></p>
-                        </form>
+                        <p class="text-center">Пожалуйста, подождите...</p>
                     </div>
                     {% if messages %}
                         <ul class="messagelist">

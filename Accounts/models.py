@@ -192,3 +192,13 @@ class Connections(models.Model):
     device_system = models.CharField(max_length=1000, null=True, blank=True)
     last_activity = models.DateTimeField(null=True, auto_now_add=True)
     verify = models.BooleanField(default=False)
+
+def get_uuid():
+    return str(uuid.uuid4())
+class MosRuAuth(models.Model):
+    uuid = models.CharField(default=get_uuid, editable=False, unique=True, max_length=3600)
+    captcha = models.BooleanField(default=False)
+    captcha_url = models.CharField(max_length=20000, null=True)
+    status = models.CharField(max_length=20, null=True,choices=[("wait", "Ожидание"), ("success", "Успешно"), ("error", "Ошибка"), ("wait_captcha", "Капча")])
+    token = models.CharField(max_length=20000, null=True)
+    data = models.JSONField(null=True)

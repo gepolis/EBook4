@@ -10,7 +10,7 @@ import datetime
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import Accounts.models
+from Accounts.models import MosRuAuth
 from django.conf import settings
 ua = UserAgent()
 user_agent = ua.ff
@@ -43,7 +43,13 @@ def get_random_proxy():
     return proxy
 
 print(get_random_proxy())
-def get_profile_data(user_login, user_password):
+def get_profile_data(user_login, user_password,uuid):
+    print(uuid)
+    print(user_login)
+    print(user_password)
+    db_obj = MosRuAuth.objects.get(uuid=uuid)
+    db_obj.status = "wait"
+    db_obj.save()
     start = datetime.datetime.now()
     opts = options
 
@@ -68,6 +74,24 @@ def get_profile_data(user_login, user_password):
     password.click()
     password.send_keys(user_password)
     button.click()
+    try:
+        captcha = driver.find_element(By.CLASS_NAME, "formCaptcha__container")
+        captcha_exists = True
+
+
+
+    except:
+        captcha_exists = False
+        pass
+
+    if captcha_exists:
+        captcha = driver.find_element(By.CLASS_NAME, "formCaptcha__container")
+        captcha_img = captcha.find_element(By.TAG_NAME, "img")
+        captcha_url = captcha_img.get_attribute("src")
+        db_obj.captcha = True
+        db_obj.captcha_url = captcha_url
+        db_obj.status="wait_captcha"
+        db_obj.save()
     state = True
     timer = 15
     while state:
@@ -108,6 +132,11 @@ def get_profile_data(user_login, user_password):
         else:
             data = False
 
+        if data:
+            db_obj.token = data.get("token")
+            db_obj.data = data
+            db_obj.status = "success"
+            db_obj.save()
         return data
     else:
         return False

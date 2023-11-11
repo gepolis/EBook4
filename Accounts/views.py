@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+from threading import Thread
 
 import django_user_agents.utils
 import requests
@@ -91,29 +92,57 @@ def auth_mos_ru(request):
         return redirect("/lk/")
 
     if request.method == "GET":
-        if request.GET.get("token"):
-            return mos_ru_login(request, request.GET.get("token"))
-        else:
-            context = {
-                "login_form": AccountMosRuForm()
-            }
-            return render(request, "mos_ru_auth.html", context=context)
+        context = {
+            "login_form": AccountMosRuForm()
+        }
+        return render(request, "mos_ru_auth.html", context=context)
     else:
-        form = AccountMosRuForm(request.POST)
-        context = {"login_form": form}
-        if form.is_valid():
-            # print(form.cleaned_data)
-            data = get_profile_data(form.cleaned_data["login"], form.cleaned_data['password'])
+        login, passowrd = request.POST.get("login"), request.POST.get("password")
+        mraa = MosRuAuthAPI(login, passowrd)
+        u = mraa.create()
+        mraa.start()
 
-            if data:
-                return mos_ru_login(request, data)
-            else:
-                messages.error(request, "Неверный логин или пароль.")
-                req = render(request, "mos_ru_auth.html", context=context)
-                return req
+        context = {
+            "uuid": u
+        }
+        return render(request, "mos_ru_auth_wait.html", context=context)
 
-        else:
-            return HttpResponse("f")
+def mos_ru_status(request, uuid):
+    m = MosRuAuthAPI.get(uuid)
+    return JsonResponse(m)
+
+
+class MosRuAuthAPI:
+    def __init__(self, login, password):
+        self.login = login
+        self.uuid = None
+        self.password = password
+
+    def create(self):
+        m = MosRuAuth.objects.create()
+        self.uuid = str(m.uuid)
+        return m.uuid
+
+    def start(self):
+        t = Thread(target=get_profile_data, args=(self.login, self.password,self.uuid))
+        t.start()
+
+    @staticmethod
+    def get(uuid):
+        m = MosRuAuth.objects.get(uuid=uuid)
+        d = {
+            "uuid": m.uuid,
+            "status": m.status,
+            "captcha": False,
+        }
+        if m.captcha:
+            d["captcha"] = True
+            d["captcha_url"] = m.captcha_url
+
+        return m
+
+
+
 
 
 def mos_ru_login(request, data):
