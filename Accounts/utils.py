@@ -1,3 +1,4 @@
+import random
 import time
 
 import requests
@@ -33,9 +34,21 @@ if settings.SERV:
 
 print(selpath)
 print("-----------")
+
+def get_random_proxy():
+    f = open("proxies.txt", "r")
+    lines = f.readlines()
+    proxy = lines[random.randint(0, len(lines) - 1)]
+    f.close()
+    return proxy
+
+print(get_random_proxy())
 def get_profile_data(user_login, user_password):
     start = datetime.datetime.now()
-    driver = webdriver.Chrome(options=options,
+    opts = options
+
+    opts.add_argument(f'--proxy-server={get_random_proxy()}')
+    driver = webdriver.Chrome(options=opts,
                               service=Service(
                                   executable_path=selpath))
     driver.get(
