@@ -60,7 +60,10 @@ def get_profile_data(user_login, user_password):
     while state:
         if timer == 0:
             print(driver.title)
-            print(driver.page_source)
+            f = open("demofile2.txt", "a")
+            f.write(driver.page_source)
+            f.close()
+
             print("time out")
             print(login.text)
             print(driver.current_url)
