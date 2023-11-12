@@ -1,27 +1,13 @@
-import random
+
 import threading
-import uuid
-from datetime import datetime
-
-import six
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, FileResponse, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import get_template
-
-from Accounts.models import Account
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.template.loader import get_template, render_to_string
 from MainApp.models import *
-from django.utils.formats import localize
 
 from PersonalArea.forms import *
-from Accounts.forms import NewBuildingForm
-from Accounts.models import Building
 from Accounts import decorators
-import io
-import xlsxwriter
-import pandas as pd
-
 @decorators.is_teacher
 def create_classroom(request):
     if ClassRoom.objects.all().filter(teacher=request.user).exists():
@@ -108,7 +94,8 @@ def classroom_students_upload(request):
         t = threading.Thread(target=students_upload_thr, args=(request,))
         t.start()
         messages.success(request, "Начинаю загрузку, пожалуйста, подождите!")
-        return redirect("/lk/classroom/students/")
+        red = redirect("/lk/classroom/students/")
+        return red
     else:
         return render(request, "teacher/students_upload.html", {"section": "classroom"})
 
@@ -116,30 +103,38 @@ def students_upload_thr(request):
     file = request.FILES["file"]
     file_lines = file.read().decode("utf-8").splitlines()
     class_room = ClassRoom.objects.get(teacher=request.user)
-    for row in file_lines:
-        d = row.split(" ")
-        sn, fn, mn = d[0], d[1], d[2]
+    try:
+        for row in file_lines:
+            print(row)
+            d = row.split(" ")
+            sn, fn, mn = d[0], d[1], d[2]
 
-        if not Account.objects.filter(first_name=fn, middle_name=mn, second_name=sn,
-                                      account__classroom=class_room).exists():
-            usr = Account.objects.create(first_name=fn, middle_name=mn, second_name=sn, role="student")
-            usr.building = request.user.building
+            if not Account.objects.filter(first_name=fn, middle_name=mn, second_name=sn,
+                                          account__classroom=class_room).exists():
+                usr = Account.objects.create(first_name=fn, middle_name=mn, second_name=sn, role="student")
+                usr.building = request.user.building
 
-            random_word = ['венок', 'забава', 'прыгун', 'флажок', 'свет', 'арена', 'цвет', 'стиль', 'роза']
-            word = random.choice(random_word)
-            random_number = random.randint(1000, 9999)
-            first_number = random.randint(0, 1)
-            if first_number == 0:
-                password = word + str(random_number)
-            else:
-                password = str(random_number) + word
-            usr.set_password(password)
-            usr.username = f"student_{usr.id}"
-            usr.save()
-            class_room.member.add(usr)
-            clu = ClassRoomTeacherAuthUser.objects.create(user=usr, classroom=class_room, password=password)
-            clu.save()
+                random_word = ['венок', 'забава', 'прыгун', 'флажок', 'свет', 'арена', 'цвет', 'стиль', 'роза']
+                word = random.choice(random_word)
+                random_number = random.randint(1000, 9999)
+                first_number = random.randint(0, 1)
+                if first_number == 0:
+                    password = word + str(random_number)
+                else:
+                    password = str(random_number) + word
+                usr.set_password(password)
+                usr.username = f"student_{usr.id}"
+                usr.save()
+                class_room.member.add(usr)
+                clu = ClassRoomTeacherAuthUser.objects.create(user=usr, classroom=class_room, password=password)
+                clu.save()
+    except Exception as e:
+        print("Error")
+        print(e)
+        messages.error(request, "Что-то пошло не так!")
+
     messages.success(request, "Загрузка завершена!")
+    request.COOKIES["lif"] = 0
 def students_list2pdf(request):
     if ClassRoom.objects.all().filter(teacher=request.user).exists():
         classroom = ClassRoom.objects.get(teacher=request.user)
