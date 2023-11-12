@@ -21,7 +21,6 @@ from Accounts import decorators
 import io
 import xlsxwriter
 import pandas as pd
-from xhtml2pdf import pisa
 
 @decorators.is_teacher
 def create_classroom(request):
