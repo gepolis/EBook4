@@ -12,7 +12,7 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = (
-            "username", "email", "second_name", "first_name", "middle_name", "date_of_birth", "building", "role",
+            "username", "email", "second_name", "first_name", "middle_name", "building", "role",
             "points",'avatar', "peculiarity")
         labels = {
             "username": "Имя пользователя",
@@ -20,7 +20,6 @@ class EditUserForm(forms.ModelForm):
             "second_name": "Фамилия",
             "first_name": "Имя",
             "middle_name": "Отчество",
-            "date_of_birth": "Дата рождения",
             "role": "Роль",
             "building": "Корпус",
             "points": "Баллов",
@@ -71,7 +70,7 @@ class NewUserForm(UserCreationForm):
     class Meta:
         model = Account
         fields = (
-            "username", "email", "second_name", "first_name", "middle_name", "password1", "password2", "date_of_birth",
+            "username", "email", "second_name", "first_name", "middle_name", "password1", "password2",
             'building','role', "avatar")
         labels = {
             "username": "Имя пользователя",
@@ -79,7 +78,6 @@ class NewUserForm(UserCreationForm):
             "second_name": "Фамилия",
             "first_name": "Имя",
             "middle_name": "Отчество",
-            "date_of_birth": "Дата рождения",
             "building": "Корпус",
             'role': "Роль",
             'avatar': "Изображение"
@@ -173,22 +171,15 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = (
-            "username", "second_name", "first_name", "middle_name", "date_of_birth", "avatar")
+            "username", "second_name", "first_name", "middle_name", "avatar")
         labels = {
             "username": "Имя пользователя",
             "second_name": "Фамилия",
             "first_name": "Имя",
             "middle_name": "Отчество",
-            "date_of_birth": "Дата рождения",
             "avatar": "Изображение",
         }
         widgets = {
-            'date_of_birth': forms.DateInput(
-                format='%Y-%m-%d',
-                attrs={'class': 'form-control',
-                       'placeholder': 'Select a date',
-                       'type': 'date'
-                       }),
             'avatar': forms.FileInput(attrs={"class": "form-control"})
         }
 

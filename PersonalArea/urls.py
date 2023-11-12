@@ -81,6 +81,8 @@ urls1 = [
     path("feedbacks/<int:fb_id>/send/", views.developer.send_feedback_answer, name="send_feedback_answer"),
     path("logs/", views.developer.get_logs, name="logs"),
     path("drag/", views.developer.drag, name="drag"),
+    path("classroom/students/upload/", views.teacher.classroom_students_upload),
+    path("classroom/students/pdf/", views.teacher.students_list2pdf),
 
     path("personalisation/locations", views.personalisation.locations, name="personalisation"),
     path("personalisation/location/<int:id>", views.personalisation.location, name="location"),
@@ -90,6 +92,7 @@ urls1 = [
 
 urls_with_not_slash = [
     path("chat/", views.other.chat),
+    path("classroom/students/pdf", views.teacher.students_list2pdf),
 
     path("users/list", views.administration.users_list),
     path("users/list/<str:role>", views.administration.users_list),
@@ -132,6 +135,7 @@ urls_with_not_slash = [
     path("classroom/invite/update", views.teacher.update_invite),
     path("classroom/invite/<uuid:classroom>", views.student.invite),
     path("classroom/students", views.teacher.classroom_students),
+    path("classroom/students/upload", views.teacher.classroom_students_upload),
 
     path("classroom/student/<int:user>/view", views.teacher.classroom_view_student),
     path("classroom/student/<int:user>/export", views.other.classroom_view_export),

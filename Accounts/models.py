@@ -67,7 +67,7 @@ class Account(AbstractBaseUser):
     TWO_AUTH_CHOICES = [
         ("email", "email"),
     ]
-    email = models.EmailField(verbose_name="email", max_length=60, unique=True)
+    email = models.EmailField(verbose_name="email", max_length=60, unique=True,null=True)
     username = models.CharField(max_length=30, unique=True)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
@@ -78,16 +78,14 @@ class Account(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_of_birth = models.DateField(null=True, verbose_name="дата рождения")
     building = models.ForeignKey(Building, on_delete=models.SET_NULL, null=True)
     points = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to=f, null=True, blank=True)
     token = models.CharField(max_length=1000, null=True)
     peculiarity = models.CharField(max_length=1000, null=True, choices=PECULARITY_CHOICE, blank=True)
-    two_auth = models.CharField(max_length=1000, null=True, blank=True, choices=TWO_AUTH_CHOICES)
     is_developer = models.BooleanField(default=False)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', "second_name", "first_name", "middle_name"]
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ["second_name", "first_name", "middle_name"]
 
     objects = MyAccountManager()
 

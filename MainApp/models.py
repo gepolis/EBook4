@@ -189,3 +189,8 @@ class FeedBackQuestions(models.Model):
 
     def __str__(self):
         return self.name
+
+class ClassRoomTeacherAuthUser(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="ct")
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, related_name="clr")
+    password = models.CharField(max_length=255)

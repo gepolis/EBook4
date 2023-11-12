@@ -138,22 +138,16 @@ class MosRuAuthAPI:
         if m.captcha:
             d["captcha"] = True
             d["captcha_url"] = m.captcha_url
-
-        return m
-
+        return d
 
 
-
-
-def mos_ru_login(request, data):
-    print(data)
+def mos_ru_login(request, uuid):
+    m = MosRuAuth.objects.get(uuid=uuid)
+    data = m.data
     fn = data.get("profile").get("first_name")
     ln = data.get("profile").get("last_name")
     mn = data.get("profile").get("middle_name")
     email = data.get("profile").get("email")
-    date_of_birth = data.get("profile").get("birth_date")
-    dob = date_of_birth.split("-")
-    date_of_birth = datetime(int(dob[0]), int(dob[1]), int(dob[2]))
     classroom_number, classroom_paralell = data.get("children")[0].get('class_name').split("-")
     role = data.get("profile").get("type")
     school = data.get("children")[0].get("school").get("short_name")
@@ -165,8 +159,7 @@ def mos_ru_login(request, data):
             username = f"user_{Account.objects.all().count()}"
             auth_user = Account(email=email, username=username, first_name=fn,
                                 second_name=ln, middle_name=mn,
-                                role=role,
-                                date_of_birth=date_of_birth, password="mos.ru",token=data.get("token"))
+                                role=role, password="mos.ru",token=data.get("token"))
             auth_user.save()
             login(request, auth_user)
 
@@ -214,7 +207,7 @@ def login_request(request):
         if form.is_valid():
             email = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(email=email, password=password)
+            user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
                 ip = get_client_ip(request)

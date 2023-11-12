@@ -6,7 +6,7 @@
         <div class="col-sm-12 col-xl-12">
             <div class="bg-light rounded h-100 p-4">
                 <h6 class="mb-4">{{event.name}}</h6>
-                <p>Описание: <strong>{{ event.description}}</strong></p>
+                <p>Описание: <strong>{{ event.description|linebreaks}}</strong></p>
                 <p>Дата начала: <strong>{{ event.start_date}}</strong></p>
                 <p>Дата окончания: <strong>{{ event.end_date}}</strong></p>
                 <p>Организатор: <strong><a href="/lk/users/{{ event.organizer.pk}}/view">{{ event.organizer.full_name}}</a></strong></p>

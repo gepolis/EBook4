@@ -79,7 +79,16 @@
 <!-- Sign Up End -->
 </div>
 <script>
-
+    const uuid = "{{ uuid }}"
+    const get_status = () => {
+        fetch(`${document.location.protocol}//${document.location.host}/auth/mosru/status/${uuid}/`).then((data) => data.json()).then((data) => {
+            console.log(data)
+            if (data.status == "success") {
+                window.open(`${document.location.protocol}//${document.location.host}/auth/mosru/login/${uuid}/`, '_self')
+            }
+        })
+    }
+    setInterval(get_status, 1000)
 </script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 

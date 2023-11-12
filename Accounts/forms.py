@@ -8,7 +8,7 @@ class NewUserForm(UserCreationForm):
     class Meta:
         model = Account
         fields = (
-        "username", "email", "second_name", "first_name", "middle_name", "password1", "password2", "date_of_birth", "building","role")
+        "username", "email", "second_name", "first_name", "middle_name", "password1", "password2", "building","role")
         labels = {
             "username": "Имя пользователя",
             "second_name": "Фамилия",
@@ -16,11 +16,9 @@ class NewUserForm(UserCreationForm):
             "middle_name": "Отчество",
             "password1": "Пароль",
             "password2": "Подтверждение пароля",
-            "date_of_birch": "Дата рождения",
             "building": "Учебный корпус",
         }
         widgets = {
-            'date_of_birth': forms.DateInput(attrs={"type": "date"}),
             'username': forms.TextInput(attrs={'onkeydown': "check_form_valid()"}),
             'role': forms.HiddenInput(),
         }
@@ -41,12 +39,12 @@ class NewUserForm(UserCreationForm):
             self.fields[fieldname].help_text = None
 
 class AccountSignInForm(AuthenticationForm):
-    username = forms.EmailField(widget=forms.EmailInput(), label='Почта')
+    username = forms.CharField(label='Логин')
     password = forms.CharField(widget=forms.PasswordInput(), label='Пароль')
 
     class Meta:
         model = Account
-        fields = ['email', 'password']
+        fields = ['username', 'password']
 
 class AccountMosRuForm(forms.Form):
     login = forms.CharField(label="Почта или номер телефона")

@@ -13,16 +13,6 @@
                 <div class="col-sm col-sm-8">
                     <h6 class="mb-4">Мероприятия</h6>
                 </div>
-                <div class="col-sm col-sm-4">
-                    <select id="role-filter" onchange="building_filter(this)" class="form-control">
-                        <option value="all" {% if building == "all" %}selected{% endif %}>Все</option>
-                        <option value="classroom" {% if not building %}selected{% endif %}>Для моего класса</option>
-                        {% for build in buildings %}
-                            <option value="{{ build.pk }}"
-                                    {% if building == build.pk %}selected{% endif %}>{{ build.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
             </div>
             <br>
             <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -41,7 +31,7 @@
                                 Начало: {{ event.start_date }}<br>
                                 Конец: {{ event.end_date }}
                                 </p>
-                                <!--<a href="/lk/events/{{ event.pk }}/invite" class="btn btn-primary">Пригласить</a>-->
+                                <a href="/lk/events/{{ event.id }}/request" class="btn btn-primary">Подать заявку</a>
                             </div>
                         </div>
                     </div>
