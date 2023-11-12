@@ -75,7 +75,7 @@
                     center: 'title',
                     right: ''
                 },
-                events: `/lk/events/all_events/?mode=student&student={{ student.pk }}`,
+                events: `${window.location.protocol}//${window.location.host}/lk/events/all_events/?mode=student&student={{ student.pk }}`,
                 eventLimit: true,
                 lang: 'ru',
                 displayEventTime: false

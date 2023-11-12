@@ -55,7 +55,7 @@ def invite_classroom_event(request, id):
         classroom = ClassRoom.objects.get(teacher=request.user)
         event = Events.objects.get(pk=id)
         for member in classroom.member.all():
-            if not EventsMembers.objects.all().filter(user=member, event=event).exists():
+            if not event.volunteer.all().filter(user=member).exists():
                 vol = EventsMembers.objects.create(user=member, is_active=True)
                 event.volunteer.add(vol)
         messages.success(request, "Вы успешно пригласили класс на мероприятие.")
