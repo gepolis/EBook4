@@ -1,5 +1,6 @@
 import math
 
+from django.db.models import Q
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -103,7 +104,7 @@ class UsersViewSet(APIView):
         max_page, q, page,prev, next = pagination_queryset(request, queryset)
         serializer = UsersSerializer(q, many=True)
         statictic = {
-            "staff": queryset.filter(role="methodist").count(),
+            "staff": queryset.filter((Q(role="methodist") | Q(role="head_teacher") | Q(role="admin") | Q(role="teacher") | Q(role="director") | Q(role="psychologist")) & Q(is_superuser=False)).count(),
             "parents": queryset.filter(role="parent").count(),
             "students": queryset.filter(role="student").count(),
             "all": queryset.count(),
