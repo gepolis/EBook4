@@ -22,8 +22,15 @@ def create_classroom(request):
                 classroom.teacher = request.user
                 classroom.save()
             else:
-                messages.error(request,
-                               "Данный класс уже существует. Если вы являетесь классным руководителем класса который уже существует, обратитесь к администрации.")
+                classroom = ClassRoom.objects.get(classroom=int(request.POST["classroom"]),parallel=str(request.POST["parallel"]).upper())
+                if classroom.teacher is None:
+                    classroom.teacher = request.user
+                    classroom.save()
+                    messages.success(request,
+                                     "Вы успешно получили доступ к классу.")
+                else:
+                    messages.error(request,
+                                   "Данный класс уже существует. Если вы являетесь классным руководителем класса который уже существует, обратитесь к администрации.")
                 return render(request, "teacher/create_classroom.html", {"form": form, "section": "classroom"})
         return redirect("/lk/")
     return render(request, "teacher/create_classroom.html", {"form": form, "section": "classroom"})
