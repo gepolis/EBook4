@@ -16,7 +16,7 @@ BUILDINGS_PARALELS = {
     6: ["Н", "О"]
 }
 
-DEBUG = True
+DEBUG = False
 SERV = True
 
 LOGIN_URL = "/auth/"
@@ -48,8 +48,13 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django_user_agents',
     'rest_framework',
+    'django_crontab',
     'rest_framework.authtoken'
 ]
+CRONJOBS = [
+    ('*/1 * * * *', 'MainApp.cron.my_scheduled_job')
+]
+
 APPEND_SLASH=False
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -199,3 +204,6 @@ ROLES_PASSWORDS = {
     "psychologist": "7m8n9p",
     "methodist": "K3T7Jc",
 }
+
+PROXIES_PATH = BASE_DIR / "proxies.txt"
+print(PROXIES_PATH)

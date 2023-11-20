@@ -108,7 +108,6 @@ class EventAddForm(forms.ModelForm):
             'description': forms.Textarea(),
             'start_date': forms.DateTimeInput(format=['%d/%m/%y'], attrs={'type': 'datetime-local'}),
             'end_date': forms.DateTimeInput(format=['%d/%m/%y'], attrs={'type': 'datetime-local'}),
-            'organizer': forms.Select(),
             'type': forms.Select(attrs={"onchange": "change(this)"}),
             'category': forms.Select(),
             'classroom_number': forms.Select(),
@@ -301,3 +300,8 @@ class PsychologistScheduleAddForm(forms.Form):
     start_time = forms.TimeField(label="Время начала", widget=forms.TimeInput(attrs={'type': 'time'}))
     end_time = forms.TimeField(label="Время окончания", widget=forms.TimeInput(attrs={'type': 'time'}))
     child = forms.ModelChoiceField(queryset=Account.objects.all().filter(role="student", peculiarity__isnull=False), label="Ученик")
+
+class AddMaterialForm(forms.Form):
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True, "class": "form-control"}),
+                           label="Изображения", )
+

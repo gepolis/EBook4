@@ -12,7 +12,7 @@ class EventAddForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'placeholder': "Описание"}),
             'start_date': forms.DateTimeInput(format=['%d/%m/%y'], attrs={'type': 'datetime-local'}),
             'end_date': forms.DateTimeInput(format=['%d/%m/%y'], attrs={'type': 'datetime-local'}),
-            'organizer': forms.Select()
+            'organizer': forms.Select(attrs={'class': 'form-select'}),
         }
 
     def save(self, commit=True):

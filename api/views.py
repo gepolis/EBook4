@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from Accounts.models import Account, Building
-from MainApp.models import Events, EventsMembers, EventCategory
+from MainApp.models import Events, EventsMembers, EventCategory, ClassRoom
 from rest_framework import generics, mixins
 from rest_framework import permissions
 from .serializers import *
@@ -113,3 +113,18 @@ class UsersViewSet(APIView):
         print(statictic)
         return Response(
             {"results": serializer.data, "prev": prev, "next": next, "max": max_page, "page": page, "statictic": statictic})
+
+
+
+class ClassroomsViewSet(APIView):
+    permission_classes = [IsAdmin]
+
+    @action(methods=['get'], detail=False)
+    def get(self, request):
+        queryset = ClassRoom.objects.all()
+        token = request.META.get('HTTP_AUTHORIZATION')
+        max_page, queryset, page,prev, next = pagination_queryset(request, queryset)
+        print(prev, next)
+        serializer = ClassroomSerializer(queryset, many=True)
+        return Response(
+            {"results": serializer.data, "prev": prev, "next": next, "max": max_page, "page": page})

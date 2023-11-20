@@ -8,4 +8,5 @@ urlpatterns = [
     path(r'profile/', ProfileViewSet.as_view()),
     path(r'profile/<int:pk>', ProfileViewSet.as_view()),
     path(r'buildings/', BuildingViewSet.as_view()),
+    path(r'classrooms/', ClassroomsViewSet.as_view()),
 ]

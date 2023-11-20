@@ -36,7 +36,7 @@ print(selpath)
 print("-----------")
 
 def get_random_proxy():
-    f = open("proxies.txt", "r")
+    f = open(f"{settings.PROXIES_PATH}", "r")
     lines = f.readlines()
     proxy = lines[random.randint(0, len(lines) - 1)]
     f.close()

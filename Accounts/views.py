@@ -48,7 +48,7 @@ def add_connection(request):
 
 def register_request(request):
     if request.user.is_authenticated:
-        return redirect("/lk/")
+        return redirect("/lk/choice/")
 
     elif request.method == "POST":
         form = NewUserForm(request.POST)
@@ -64,7 +64,7 @@ def register_request(request):
             login(request, user)
             add_connection(request)
             messages.success(request, 'Вы успешно зарегистрировались!')
-            r = redirect("/lk/")
+            r = redirect("/lk/choice/")
             r.set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
             return r
         else:
@@ -77,7 +77,7 @@ def register_request(request):
 
 def auth(request):
     if request.user.is_authenticated:
-        return redirect("/lk/")
+        return redirect("/lk/choice/")
     context = {
         "register_form": NewUserForm(),
         "login_form": AccountSignInForm()
@@ -89,7 +89,7 @@ def auth_mos_ru(request):
     #messages.error(request, "Авторизация через mos.ru временно не работает, пожалуйста, используйте другой способ авторизации или попробуйте позже.")
     #return redirect("/auth/")
     if request.user.is_authenticated:
-        return redirect("/lk/")
+        return redirect("/lk/choice/")
 
     if request.method == "GET":
         context = {
@@ -187,20 +187,20 @@ def mos_ru_login(request, uuid):
                     classroom.member.add(auth_user)
                     classroom.save()
                     print(classroom.pk)
-                c = redirect("/lk/")
+                c = redirect("/lk/choice/")
                 c.set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
                 return c
 
         else:
             auth_user = Account.objects.get(email=email)
             login(request, auth_user)
-        return redirect("/lk/")
+        return redirect("/lk/choice/")
     return HttpResponse(data)
 
 
 def login_request(request):
     if request.user.is_authenticated:
-        return redirect("/lk/")
+        return redirect("/lk/choice/")
 
     if request.method == "POST":
         form = AccountSignInForm(request, data=request.POST)
@@ -216,7 +216,7 @@ def login_request(request):
                 else:
                     add_connection(request)
                 messages.success(request, 'Вы успешно вошли!')
-                r = redirect("/lk/")
+                r = redirect("/lk/choice/")
                 r.set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7*30)
                 return r
             else:

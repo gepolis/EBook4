@@ -8,6 +8,7 @@ from . import views
 
 urls1 = [
     path("", views.other.index),
+    path("choice/", views.other.choice),
     path("chat/", views.other.chat),
 
     path("users/list/", views.administration.users_list),
@@ -75,12 +76,13 @@ urls1 = [
     path("settings/security/devices/delete/<str:device>/", views.other.delete_device, name="delete_device"),
     path("settings/linking/mosru/", views.other.settings_linking_mosru, name="settings_linking_mosru"),
 
-    path("feedbacks/", views.developer.feedbacks, name="feedbacks"),
-    path("feedbacks/archive/", views.developer.feedbacks_archive, name="feedbacks_archived"),
-    path("feedbacks/<int:fb_id>/", views.developer.view_feedback, name="view_feedback"),
-    path("feedbacks/<int:fb_id>/send/", views.developer.send_feedback_answer, name="send_feedback_answer"),
-    path("logs/", views.developer.get_logs, name="logs"),
-    path("drag/", views.developer.drag, name="drag"),
+    path("developer/", views.developer.developer),
+    path("developer/feedbacks/", views.developer.feedbacks, name="feedbacks"),
+    path("developer/feedbacks/archive/", views.developer.feedbacks_archive, name="feedbacks_archived"),
+    path("developer/feedbacks/<int:fb_id>/", views.developer.view_feedback, name="view_feedback"),
+    path("developer/feedbacks/<int:fb_id>/send/", views.developer.send_feedback_answer, name="send_feedback_answer"),
+    path("developer/logs/", views.developer.get_logs, name="logs"),
+    path("developer/drag/", views.developer.drag, name="drag"),
     path("classroom/students/upload/", views.teacher.classroom_students_upload),
     path("classroom/students/pdf/", views.teacher.students_list2pdf),
 
@@ -92,6 +94,7 @@ urls1 = [
 
 urls_with_not_slash = [
     path("chat/", views.other.chat),
+
     path("classroom/students/pdf", views.teacher.students_list2pdf),
 
     path("users/list", views.administration.users_list),
@@ -160,15 +163,30 @@ urls_with_not_slash = [
     path("settings/security/devices/delete/<str:device>", views.other.delete_device, name="delete_device"),
     path("settings/linking/mosru", views.other.settings_linking_mosru, name="settings_linking_mosru"),
 
-    path("feedbacks", views.developer.feedbacks, name="feedbacks"),
-    path("feedbacks/archive", views.developer.feedbacks_archive, name="feedbacks_archived"),
-    path("feedbacks/<int:fb_id>", views.developer.view_feedback, name="view_feedback"),
-    path("feedbacks/<int:fb_id>/send", views.developer.send_feedback_answer, name="send_feedback_answer"),
-    path("logs", views.developer.get_logs, name="logs"),
-    path("drag", views.developer.drag, name="drag"),
+    path("developer", views.developer.developer),
+    path("developer/feedbacks", views.developer.feedbacks, name="feedbacks"),
+    path("developer/feedbacks/archive", views.developer.feedbacks_archive, name="feedbacks_archived"),
+    path("developer/feedbacks/<int:fb_id>", views.developer.view_feedback, name="view_feedback"),
+    path("developer/feedbacks/<int:fb_id>/send", views.developer.send_feedback_answer, name="send_feedback_answer"),
+    path("developer/logs", views.developer.get_logs, name="logs"),
+    path("developer/drag", views.developer.drag, name="drag"),
 
     path("personalisation/locations", views.personalisation.locations, name="personalisation"),
     path("personalisation/location/<int:id>", views.personalisation.location, name="location"),
 ]
 
-urlpatterns = (urls1 + urls_with_not_slash) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+organizer_urls = [
+    path("organizer", views.organizer.index, name="organizer"),
+    path("organizer/events", views.organizer.events, name="organizer_events"),
+    path("organizer/events/<int:event_id>/materials", views.organizer.materials, name="organizer_event_detail"),
+    path("organizer/events/<int:event_id>/edit", views.organizer.edit_event_scenario, name="organizer_event_detail"),
+    path("organizer/events/<int:event_id>/view", views.organizer.view_event_scenario, name="organizer_event_view"),
+
+]
+
+admin_stats_urls = [
+    path("statistics/", views.statistics.index, name="admin_stats"),
+
+]
+
+urlpatterns = (urls1 + urls_with_not_slash) + organizer_urls + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

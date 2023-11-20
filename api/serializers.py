@@ -11,6 +11,12 @@ class BuildingSerializer(serializers.ModelSerializer):
     class Meta:
         model = accounts.Building
         fields = ['id', 'name', 'type','get_type_display']
+
+
+class ClassroomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ClassRoom
+        fields = ['id', 'uuid', 'classroom', 'parallel', 'member', 'teacher']
 class EventsSerializer(serializers.ModelSerializer):
     start_date = serializers.DateTimeField(format=datetime_format)
     end_date = serializers.DateTimeField(format=datetime_format)

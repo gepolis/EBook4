@@ -5,6 +5,8 @@ from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.contrib import messages
 
+from MainApp.models import Events
+
 
 def is_psychologist(view_func):
     @functools.wraps(view_func)
@@ -150,6 +152,19 @@ def is_developer(view_func):
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
             if request.user.is_developer:
+                return view_func(request, *args, **kwargs)
+            else:
+                raise PermissionDenied
+        else:
+            return redirect("auth")
+
+    return wrapper
+
+def is_event_organizer(view_func):
+    @functools.wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if Events.objects.all().filter(organizer=request.user).exists():
                 return view_func(request, *args, **kwargs)
             else:
                 raise PermissionDenied

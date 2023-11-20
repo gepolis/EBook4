@@ -8,7 +8,9 @@ from django.core import validators
 from django.db.models import Q
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.utils import timezone
 
+import Accounts.models
 Account = "Accounts.account"
 import uuid
 
@@ -53,6 +55,14 @@ class Subjects(models.Model):
         return self.name
 
 
+class OrganizationScenario(models.Model):
+    name = models.TextField(max_length=5550)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    active = models.BooleanField(default=False)
+
+class Materials(models.Model):
+    name = models.CharField(max_length=255)
+    file = models.FileField(upload_to="materials/%Y/%m/%d/")
 class Events(models.Model):
     CLASSROOM = [
         ("0", "Детский сад"),
@@ -88,7 +98,11 @@ class Events(models.Model):
     subject = models.ForeignKey(Subjects, on_delete=models.SET_NULL, null=True, related_name="subject", blank=True)
     category = models.ForeignKey(EventCategory, related_name="category", on_delete=models.SET_NULL, null=True,
                                  blank=True)
-    organizer = models.ForeignKey(Account, on_delete=models.SET_NULL, related_name="organizer", null=True)
+    organizer = models.ManyToManyField(Account, related_name="organizer")
+    organizer_scenario = models.ManyToManyField(OrganizationScenario, related_name="organizer_scenario", blank=True)
+    organizer_materials = models.ManyToManyField(Materials, related_name="organizer_materials", blank=True)
+
+
     building = models.ForeignKey("Accounts.building", on_delete=models.SET_NULL, related_name="building", null=True)
 
     volunteer = models.ManyToManyField(EventsMembers, related_name="volunteers", blank=True)
@@ -194,3 +208,51 @@ class ClassRoomTeacherAuthUser(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="ct")
     classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, related_name="clr")
     password = models.CharField(max_length=255)
+
+class SystemReports(models.Model):
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+    users_count = models.IntegerField()
+    events_count = models.IntegerField()
+    classrooms_count = models.IntegerField()
+    teachers_count = models.IntegerField()
+    staffs_count = models.IntegerField()
+    students_count = models.IntegerField()
+    students_in_events_count = models.IntegerField()
+    accounts_have_admin_permissions = models.IntegerField()
+    end_events_count = models.IntegerField()
+    average_events_members_count = models.IntegerField()
+    average_members_points = models.IntegerField()
+
+    @staticmethod
+    def create_report():
+        users = Accounts.models.Account.objects.all()
+        events = Events.objects.all()
+        classrooms = ClassRoom.objects.all()
+        students = users.filter(role="student").count()
+        teachers = users.filter(role="teacher").count()
+        staffs = users.filter(role="methodist").count()+users.filter(role="head_teacher").count()+users.filter(role="director").count()+users.filter(role="psychologist").count()+teachers
+        classrooms_count = classrooms.count()
+        events_count = events.count()
+        end_events_count = events.filter(end_date__gt=timezone.now()).count()
+        accounts_have_admin_permissions = users.filter(role="admin").count() + users.filter(role="director").count()
+        students_in_events_count = [i.volunteer.count() for i in events]
+        students_in_events_count = sum(students_in_events_count)
+        average_events_members_count = students_in_events_count/students
+        average_members_points = [i.points for i in users]
+        average_members_points = sum(average_members_points)
+        average_members_points = average_members_points/students
+        SystemReports.objects.create(
+            users_count = users.count(),
+            events_count = events_count,
+            classrooms_count = classrooms_count,
+            teachers_count = teachers,
+            staffs_count = staffs,
+            students_count = students,
+            students_in_events_count = students_in_events_count,
+            accounts_have_admin_permissions = accounts_have_admin_permissions,
+            end_events_count = end_events_count,
+            average_events_members_count = average_events_members_count,
+            average_members_points = average_members_points
+        )
+

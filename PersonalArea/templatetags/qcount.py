@@ -19,3 +19,5 @@ def questions_count():
 def qc():
     c = FeedBackQuestions.objects.all().filter(answer__isnull=True).count()
     return int(c)
+
+

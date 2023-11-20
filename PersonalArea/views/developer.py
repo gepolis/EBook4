@@ -77,3 +77,7 @@ def get_logs(request):
 
 def drag(request):
     return render(request, "developer/drag.html")
+
+
+def developer(request):
+    return render(request, "developer/index.html")

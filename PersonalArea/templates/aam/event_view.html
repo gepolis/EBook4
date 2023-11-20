@@ -9,7 +9,13 @@
                 <p>Описание: <strong>{{ event.description|linebreaks}}</strong></p>
                 <p>Дата начала: <strong>{{ event.start_date}}</strong></p>
                 <p>Дата окончания: <strong>{{ event.end_date}}</strong></p>
-                <p>Организатор: <strong><a href="/lk/users/{{ event.organizer.pk}}/view">{{ event.organizer.full_name}}</a></strong></p>
+                <p>Организаторы:
+                    <strong>
+                        {% for i in event.organizer.all %}
+                        <a href="/lk/users/{{ i.pk}}/view">{{ i.full_name}}</a>,
+                        {% endfor %}
+                    </strong>
+                </p>
                 <p>Доступно для: <strong>{{ event.get_classroom_number_display}}</strong></p>
                 <p>Корпус: <strong>{{ event.building.name}} ({{event.building.get_type_display}})</strong></p>
                 {% if end %}

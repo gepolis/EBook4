@@ -7,3 +7,5 @@ from . import psychologist
 from . import administration
 from . import developer
 from . import personalisation
+from . import organizer
+from . import statistics

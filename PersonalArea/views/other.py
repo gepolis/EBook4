@@ -182,6 +182,10 @@ def all_events(request):
             e = e.filter(volunteer__in=em)
         else:
             return JsonResponse({}, safe=False)
+
+    elif mode == "org":
+        e = Events.objects.all().filter(organizer=request.user)
+        print(len(e))
     out = []
     for event in e:
         out.append({
@@ -304,3 +308,33 @@ def settings_linking_mosru(request):
     else:
         form = LinkingMosruForm()
     return render(request, "linking_mosru.html", {"form": form, "linked": False})
+
+
+def choice(request):
+    active_types = {
+        "": [{"name": "Личный кабинет", "description": "Ваш личный кабинет", "url": "/lk/", "in_dev": False, "image": "profile"}, True],
+        "organizer": [{
+            "name": "Организатор",
+            "description": "Просмотр и редактирование своих мероприятий",
+            "url": "/lk/organizer",
+            "in_dev": False,
+            "image": "organizer"
+        }, Events.objects.all().filter(organizer=request.user).exists()],
+        "statistics": [{"name": "Статистика", "description": "Статистика КА ГБОУ Школы 1236", "in_dev": True, "url": "/lk/statistics", "image": "statistics"}, request.user.is_developer],
+        "developer": [{"name": "Разработчик", "description": "Логи, Тех-поддержка", "in_dev": False, "url": "/lk/developer", "image": "developer"}, request.user.is_developer],
+
+
+    }
+    tmp = {}
+
+    for i in active_types:
+        if active_types[i][1]:
+            tmp[i] = active_types[i][0]
+            if active_types[i][0]["in_dev"]:
+                tmp[i]["name"] = "Скоро..."
+                tmp[i]["description"] = "В разработке"
+                tmp[i]["url"] = "#"
+                tmp[i]["image"] = "dev"
+
+
+    return render(request, "choice.html", {"active_types": tmp})
