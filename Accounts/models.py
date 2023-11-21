@@ -36,6 +36,13 @@ class MyAccountManager(BaseUserManager):
         return user
 
 
+
+class Role(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    label = models.CharField(max_length=255, unique=True, default="Пользователь")
+
+    def __str__(self):
+        return self.name
 class Building(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=[("school", "Школа"), ('kg', 'Детский сад')], blank=True)
@@ -71,23 +78,27 @@ class Account(AbstractBaseUser):
     username = models.CharField(max_length=30, unique=True)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
-    role = models.TextField(choices=ROLES, null=True, max_length=20)
+    #role = models.TextField(choices=ROLES, null=True, max_length=20)
+    role = models.ManyToManyField(Role, blank=True, related_name="role")
+
     first_name = models.CharField(max_length=50, null=True)  # Имя
     second_name = models.CharField(max_length=50, null=True)  # Фамилия
     middle_name = models.CharField(max_length=50, null=True)  # Отчество
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    building = models.ForeignKey(Building, on_delete=models.SET_NULL, null=True)
+    building = models.ForeignKey(Building, on_delete=models.SET_NULL, null=True, related_name="building_account")
     points = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to=f, null=True, blank=True)
     token = models.CharField(max_length=1000, null=True)
     peculiarity = models.CharField(max_length=1000, null=True, choices=PECULARITY_CHOICE, blank=True)
+    hide_roles = models.ManyToManyField(Role, blank=True, related_name="hidden_roles")
     is_developer = models.BooleanField(default=False)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ["second_name", "first_name", "middle_name"]
 
     objects = MyAccountManager()
+
 
     def __str__(self):
         return f"{self.second_name} {self.first_name} {self.middle_name}"
@@ -137,6 +148,15 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+    def roles_str(self):
+        roles = []
+        for r in self.role.all():
+            if r not in self.hide_roles.all():
+                print(r.name)
+                roles.append(r.name)
+
+        return ', '.join(roles)
+
 
 
     def get_avatar(self):
@@ -180,6 +200,21 @@ class Account(AbstractBaseUser):
 
             avatar_url = f"https://ui-avatars.com/api/?name={self.first_name}+{self.middle_name}&background={bg}&color={fc}"
             return avatar_url
+
+    def has_role(self, role):
+        role = Role.objects.get(label=role)
+        if role in self.role.all():
+            return True
+        else:
+            return False
+
+    def has_roles(self, roles):
+        for role in roles:
+            if self.has_role(role):
+                return True
+        return False
+
+
 
 
 class Connections(models.Model):

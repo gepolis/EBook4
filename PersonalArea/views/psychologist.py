@@ -100,3 +100,9 @@ def schedule_add(request):
         form = PsychologistScheduleAddForm()
     cal = render_to_string("psychologist/calendar.html", {"url": False, "classes": False})
     return render(request, "psychologist/schedule_add.html", {"section": "schedule", "form": form, "cal": cal})
+
+def index(request):
+    context = {
+        "section": "index"
+    }
+    return render(request, "psychologist/index.html", context)

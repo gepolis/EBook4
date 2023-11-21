@@ -32,7 +32,8 @@ def give_points(request, id):
             user_account.save()
             return redirect(f"/lk/events/{event.pk}/points/give")
     else:
-        return render(request, "aam/give_points.html", {"event": event, "volunteers": volunteers, "section": "events"})
+
+        return render(request, "aam/give_points.html", {"event": event, "volunteers": volunteers, "section": "events",})
 
 
 @decorators.is_admin_or_methodist

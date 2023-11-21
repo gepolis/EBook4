@@ -11,7 +11,7 @@ class IsAdmin(BasePermission):
     def has_permission(self, request, view):
         user = get_user_by_token(request)
         if user:
-            if user.role in ["admin", "director", "head_teacher"]:
+            if user.has_role("admin") or user.has_role("director") or user.has_role("head_teacher"):
                 return True
         return False
 
@@ -42,7 +42,7 @@ class IsStaff(BasePermission):
     def has_permission(self, request, view):
         user = get_user_by_token(request)
         if user:
-            if user.role in ["admin", "director", "head_teacher","methodist","teacher","psychologist"]:
+            if user.has_role("admin") or user.has_role("director") or user.has_role("head_teacher") or user.has_role("methodist") or user.has_role("teacher") or user.has_role("psychologist"):
                 return True
         return False
 
@@ -50,6 +50,6 @@ class IsStaff(BasePermission):
     def has_object_permission(self, request, view, obj):
         user = get_user_by_token(request)
         if user:
-            if user.role in ["admin", "director", "head_teacher", "methodist", "teacher", "psychologist"]:
+            if user.has_role("admin") or user.has_role("director") or user.has_role("head_teacher") or user.has_role("methodist") or user.has_role("teacher") or user.has_role("psychologist"):
                 return True
         return False

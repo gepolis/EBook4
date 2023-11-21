@@ -194,7 +194,10 @@ def mos_ru_login(request, uuid):
         else:
             auth_user = Account.objects.get(email=email)
             login(request, auth_user)
-        return redirect("/lk/choice/")
+
+        c = redirect("/lk/choice/")
+        c.set_cookie("token", get_or_generate_token(request), max_age=60 * 60 * 24 * 7 * 30)
+        return c
     return HttpResponse(data)
 
 

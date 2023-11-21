@@ -99,14 +99,14 @@ class UsersViewSet(APIView):
 
         if token:
             user = Token.objects.get(key=token.split()[1]).user
-        if user.role == "head_teacher":
+        if user.has_role("head_teacher") and not request.user.has_roles(["admin", "director"]):
             queryset = queryset.filter(building_id=user.building_id)
         max_page, q, page,prev, next = pagination_queryset(request, queryset)
         serializer = UsersSerializer(q, many=True)
         statictic = {
-            "staff": queryset.filter((Q(role="methodist") | Q(role="head_teacher") | Q(role="admin") | Q(role="teacher") | Q(role="director") | Q(role="psychologist")) & Q(is_superuser=False)).count(),
-            "parents": queryset.filter(role="parent").count(),
-            "students": queryset.filter(role="student").count(),
+            "staff": queryset.filter((Q(role__label="methodist") | Q(role__label="head_teacher") | Q(role__label="admin") | Q(role__label="teacher") | Q(role__label="director") | Q(role__label="psychologist")) & Q(is_superuser=False)).count(),
+            "parents": 0,
+            "students": queryset.filter(role__label="student").count(),
             "all": queryset.count(),
 
         }

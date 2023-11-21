@@ -12,7 +12,7 @@ def is_psychologist(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.role == "psychologist":
+            if request.user.has_role("psychologist"):
                 return view_func(request, *args, **kwargs)
             else:
                 return PermissionDenied()
@@ -26,7 +26,8 @@ def is_admin(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.role == "admin" or request.user.role == "director":
+
+            if request.user.has_role("admin") or request.user.has_role("director"):
                 return view_func(request, *args, **kwargs)
             else:
                 raise PermissionDenied
@@ -51,7 +52,7 @@ def is_teacher(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.role == "teacher":
+            if request.user.has_role("teacher"):
                 return view_func(request, *args, **kwargs)
             else:
                 raise PermissionDenied
@@ -65,7 +66,7 @@ def is_student(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.role == "student":
+            if request.user.has_role("student"):
                 return view_func(request, *args, **kwargs)
             else:
                 raise PermissionDenied
@@ -79,7 +80,7 @@ def is_methodist(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.role == "methodist":
+            if request.user.has_role("methodist"):
                 return view_func(request, *args, **kwargs)
             else:
                 raise PermissionDenied
@@ -135,8 +136,8 @@ def is_school_administrator(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.role in ["head_teacher", "admin", "director"]:
-                if request.user.role == "head_teacher":
+            if request.user.has_roles(["admin", "director", "head_teacher"]):
+                if request.user.has_role("head_teacher") and not request.user.has_roles(["admin", "director"]):
                     if request.user.building is None:
                         raise PermissionDenied
                 return view_func(request, *args, **kwargs)

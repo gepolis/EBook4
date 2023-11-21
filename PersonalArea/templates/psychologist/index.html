@@ -1,4 +1,4 @@
-{% extends "inc/base.html" %}
+{% extends "inc/psychologist_base.html" %}
 {% block content %}
     <!-- Sale & Revenue End -->
     <div class="container-fluid pt-4 px-4">
@@ -34,8 +34,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
-            var url = `${window.location.protocol}//${window.location.host}/lk/schedule/view/`;
-            var lUrl = `${window.location.protocol}//${window.location.host}/lk/classes`
+            var url = `${window.location.protocol}//${window.location.host}/lk/psychologist/schedule/view/`;
+            var lUrl = `${window.location.protocol}//${window.location.host}/lk/psychologist/classes`
             console.log(url)
             var calendar = new FullCalendar.Calendar(calendarEl, {
                     timeZone: 'UTC',

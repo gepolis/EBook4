@@ -1,4 +1,4 @@
-{% extends "inc/base.html" %}
+{% extends "inc/admin_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="container-fluid pt-4 px-4">
@@ -20,7 +20,7 @@
                         {% for classroom in classrooms %}
 
                             <tr>
-                                <th scope="row"><a href="/classrooms/{{ classroom.id }}">{{ classroom.id }}</a></th>
+                                <th scope="row"><a href="lk/admin/classrooms/{{ classroom.id }}">{{ classroom.id }}</a></th>
                                 <td>{{ classroom }}</td>
                                 <td>{% if classroom.teacher %}{{ classroom.teacher.full_name }}{% else %}Не
                                     зарегистрирован(а){% endif %}</td>

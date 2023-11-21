@@ -1,4 +1,4 @@
-{% extends "inc/base.html" %}
+{% extends "inc/psychologist_base.html" %}
 {% block content %}
     <!-- Sale & Revenue End -->
     <div class="container-fluid pt-4 px-4">
@@ -131,7 +131,7 @@
                 let form = document.querySelector("form")
                 let final_data = `?date=${date_field}&start=${classesStartTime.value}&end=${classesEndTime.value}&id=${pk}`
 
-                window.location.replace(`/lk/schedule/edit${final_data}`)
+                window.location.replace(`/lk/psychologist/schedule/edit${final_data}`)
             }
 
         })

@@ -1,4 +1,4 @@
-{% extends "inc/base.html" %}
+{% extends "inc/admin_base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -338,7 +338,7 @@
             apiFetch(`profile/${pk}`).then((data) => {
                 full_name_text.innerHTML = data.user.full_name
                 email_text.innerHTML = data.user.email
-                role_text.innerHTML = data.user.get_role_display
+                role_text.innerHTML = data.user.roles_str
                 join_date_text.innerHTML = data.user.date_joined
                 last_login_text.innerHTML = data.user.last_login
                 loader.style = "display: None;"
@@ -360,7 +360,7 @@
 
             cell1.innerHTML = `<td> <img class="rounded-circle me-lg-2 avatar" src="${data['get_avatar']}" alt=""style="width: 40px; height: 40px;">${data['full_name']}</td>`;
             cell2.innerHTML = `${data['email']}`;
-            cell3.innerHTML = `${data['get_role_display']}`;
+            cell3.innerHTML = `${data['roles_str']}`;
             cell4.innerHTML = `<div class="dropdown">
                                         <button class="btn btn-secondary" type="button"
                                                 id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -380,18 +380,18 @@
                                                 </button>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="/lk/users/${data['id']}/edit">Изменить</a>
+                                                <a class="dropdown-item" href="/lk/admin/users/${data['id']}/edit">Изменить</a>
                                             </li>
                                             {% if user.is_superuser %}
                                                 <li>
-                                                    <a href="/lk/users/${data['id']}/login"
+                                                    <a href="/lk/admin/users/${data['id']}/login"
                                                        class="dropdown-item">Войти</a>
                                                 </li>
                                             {% endif %}
 
                                             {% if user.role != "head_teacher" %}
                                                     <li><a class="dropdown-item"
-                                                           href="/lk/users/${data['id']}/delete">Удалить</a></li>
+                                                           href="/lk/admin/users/${data['id']}/delete">Удалить</a></li>
                                             {% endif %}
                                         </ul>
                                     </div>`;

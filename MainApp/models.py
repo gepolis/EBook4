@@ -34,7 +34,7 @@ class ClassRoomsNumber(models.Model):
 
 class EventCategory(models.Model):
     name = models.CharField(max_length=255)
-    methodists = models.ManyToManyField(Account, limit_choices_to={"role": "methodist"}, blank=True)
+    methodists = models.ManyToManyField(Account, limit_choices_to={"role__label": "methodist"}, blank=True)
 
     class Meta:
         verbose_name = "Категория"

@@ -1,4 +1,4 @@
-{% extends "inc/base.html" %}
+{% extends "inc/admin_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container-fluid pt-4 px-4">
@@ -12,7 +12,7 @@
                 <p>Организаторы:
                     <strong>
                         {% for i in event.organizer.all %}
-                        <a href="/lk/users/{{ i.pk}}/view">{{ i.full_name}}</a>,
+                        <a href="/lk/admin/users/{{ i.pk}}/view">{{ i.full_name}}</a>,
                         {% endfor %}
                     </strong>
                 </p>

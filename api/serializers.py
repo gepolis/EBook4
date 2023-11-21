@@ -24,13 +24,16 @@ class EventsSerializer(serializers.ModelSerializer):
         model = models.Events
         fields = ['id', 'name', 'description', 'start_date', 'end_date', 'volunteer_count', 'organizer', 'category']
 
-
+class RolesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = accounts.Role
+        fields = ['name']
 class UsersSerializer(serializers.ModelSerializer):
     last_login = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     date_joined = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     class Meta:
         model = accounts.Account
-        fields = ['id', 'full_name', 'email', 'get_role_display', 'date_joined', 'last_login','get_avatar']
+        fields = ['id', 'full_name', 'email', 'roles_str', 'date_joined', 'last_login','get_avatar']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -38,4 +41,4 @@ class ProfileSerializer(serializers.ModelSerializer):
     date_joined = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     class Meta:
         model = accounts.Account
-        fields = ['id', 'full_name', 'email', 'get_role_display', 'date_joined', 'last_login']
+        fields = ['id', 'full_name', 'email', 'roles_str', 'date_joined', 'last_login']

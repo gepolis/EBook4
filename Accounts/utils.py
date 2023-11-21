@@ -54,9 +54,13 @@ def get_profile_data(user_login, user_password,uuid):
     opts = options
 
     opts.add_argument(f'--proxy-server={get_random_proxy()}')
-    driver = webdriver.Chrome(options=opts,
-                              service=Service(
-                                  executable_path=selpath))
+    try:
+        driver = webdriver.Chrome(options=opts,
+                                  service=Service(
+                                      executable_path=selpath))
+    except Exception as e:
+        db_obj.status = "error"
+        db_obj.save()
     driver.get(
         "https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type"
         "%3Doffline%26client_id%3Ddnevnik.mos.ru%26scope%3Dopenid%2Bprofile%2Bbirthday%2Bcontacts%2Bsnils"

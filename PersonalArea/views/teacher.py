@@ -95,7 +95,7 @@ def classroom_view_student(request, user):
     else:
         return redirect("/lk/classroom/create/")
 
-
+@decorators.is_teacher
 def classroom_students_upload(request):
     if request.method == "POST":
         t = threading.Thread(target=students_upload_thr, args=(request,))
@@ -106,6 +106,7 @@ def classroom_students_upload(request):
     else:
         return render(request, "teacher/students_upload.html", {"section": "classroom"})
 
+@decorators.is_teacher
 def students_upload_thr(request):
     file = request.FILES["file"]
     file_lines = file.read().decode("utf-8").splitlines()
@@ -142,6 +143,8 @@ def students_upload_thr(request):
 
     messages.success(request, "Загрузка завершена!")
     request.COOKIES["lif"] = 0
+
+@decorators.is_teacher
 def students_list2pdf(request):
     if ClassRoom.objects.all().filter(teacher=request.user).exists():
         classroom = ClassRoom.objects.get(teacher=request.user)
@@ -149,3 +152,7 @@ def students_list2pdf(request):
         return render(request, "teacher/students_pdf.html", {"members": members, "section": "classroom", "classroom": classroom})
     else:
         return redirect("/lk/classroom/create/")
+
+@decorators.is_teacher
+def index(request):
+    return render(request, "teacher/index.html", {"section": "classroom"})

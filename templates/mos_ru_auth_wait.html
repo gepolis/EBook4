@@ -56,7 +56,13 @@
                     </div>
 
                     <div class="pt-3">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border " style="width: 4.5rem; height: 4.5rem;"  role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
                         <p class="text-center">Пожалуйста, подождите...</p>
+                        <p class="text-center">Статус: <span id="status"></span></p>
                     </div>
                     {% if messages %}
                         <ul class="messagelist">
@@ -80,15 +86,29 @@
 </div>
 <script>
     const uuid = "{{ uuid }}"
+    const status = document.querySelector("#status")
     const get_status = () => {
         fetch(`${document.location.protocol}//${document.location.host}/auth/mosru/status/${uuid}/`).then((data) => data.json()).then((data) => {
             console.log(data)
             if (data.status == "success") {
-                window.open(`${document.location.protocol}//${document.location.host}/auth/mosru/login/${uuid}/`, '_self')
+                status.innerHTML = "Успешно"
+                setTimeout(() => {
+                    clearInterval(intr)
+                    status.innerHTML = "Авторизация"
+                    setTimeout(() => {window.open(`${document.location.protocol}//${document.location.host}/auth/mosru/login/${uuid}/`, '_self')}, 2000)
+                }, 3000)
+            } else if (data.status == "wait") {
+                status.innerHTML = "Ожидание"
+            } else if (data.status == "error") {
+                clearInterval(intr)
+                status.innerHTML = "Ошибка"
+                setTimeout(() => {
+                    window.open(`${document.location.protocol}//${document.location.host}/auth/mosru/`, '_self')
+                }, 3000)
             }
         })
     }
-    setInterval(get_status, 1000)
+    var intr = setInterval(get_status, 1000)
 </script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 

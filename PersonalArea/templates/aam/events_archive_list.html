@@ -1,5 +1,5 @@
 
-{% extends "inc/base.html" %}
+{% extends "inc/admin_base.html" %}
 {% load static %}
 {% block content %}
     <!-- Sales Chart Start -->
@@ -25,7 +25,7 @@
                         <tbody id="tbody">
                         {% for event in events %}
                             <tr>
-                                <td><a href="/lk/events/{{ event.id }}/view">{{ event.name }}</a></td>
+                                <td><a href="/lk/admin/events/{{ event.id }}/view">{{ event.name }}</a></td>
                                 <td>{{ event.start_date }}</td>
                                 <td>{{ event.end_date }}</td>
                                 <td>{{ event.volunteer.count }}</td>
@@ -77,7 +77,7 @@
             let cell4 = row.insertCell(3);
             let cell5 = row.insertCell(4);
 
-            cell1.innerHTML = `<a href="/lk/events/${ data['id'] }/view/">${ data['name'] }</a>`;
+            cell1.innerHTML = `<a href="/lk/admin/events/${ data['id'] }/view/">${ data['name'] }</a>`;
             cell2.innerHTML = `${data['start_date']}`;
             cell3.innerHTML = `${data['end_date']}`;
             cell4.innerHTML = `${data['volunteer_count']}`;

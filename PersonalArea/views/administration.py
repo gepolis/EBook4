@@ -19,13 +19,13 @@ from PersonalArea.models import Notications, Message
 @decorators.is_school_administrator
 def view_user(request, id):
     user = Account.objects.get(pk=id)
-    if request.user.role == "head_teacher":
+    if request.user.has_role("head_teacher"):
         if request.user.building != user.building:
-            return redirect("/lk/users/list")
+            return redirect("/lk/admin/users/list")
     if not user.is_superuser:
         return render(request, "administration/view_user.html", {"view_user": user})
 
-    return redirect("/lk/users/list")
+    return redirect("/lk/admin/users/list")
 
 
 def get_role_type(name):
@@ -37,20 +37,19 @@ def get_role_type(name):
 @decorators.is_school_administrator
 def users_list(request, role=None):
     users = Account.objects.all().filter(is_superuser=False).order_by("-id")
-    if request.user.role == "head_teacher":
+    if not request.user.has_roles(["admin", "director"]) and request.user.has_role("head_teacher"):
         users = users.filter(building=request.user.building)
 
     create_user_form = NewUserForm()
     context = {
         "count_users": users.count(),
-        "count_staff": users.filter(role__in=["teacher", "methodist"]).count(),
-        "count_parents": users.filter(role="parent").count(),
-        "count_students": users.filter(role="student").count(),
+        "count_staff": users.filter(role__label__in=["admin", "director", "head_teacher","psychologist"]).count(),
+        "count_students": users.filter(role__label__in=["student"]).count(),
         "create_user_form": create_user_form,
         "section": "users",
         "can_create": False
     }
-    if request.user.role == "admin" or request.user.role == "director":
+    if request.user.has_roles(["admin", "director"]):
         context["can_create"] = True
     if request.GET.get("role"):
         users = users.filter(role=request.GET.get("role"))
@@ -71,20 +70,23 @@ def users_list(request, role=None):
 @decorators.is_school_administrator
 def edit_user(request, id):
     user = Account.objects.get(pk=id)
+    if user.is_developer or user.is_superuser:
+        return render(request, "administration/edit_user.html", {"section": "users", "table_user": user,"can_edit": False})
     if request.method == "GET":
-        if request.user.role == "head_teacher":
+        if request.user.has_role("head_teacher"):
             form = EditUserFormHeadTeacher(instance=user)
         else:
             form = EditUserForm(instance=user)
     else:
-        if request.user.role == "head_teacher":
+        if request.user.has_role("head_teacher"):
             form = EditUserFormHeadTeacher(request.POST, request.FILES, instance=user)
         else:
             form = EditUserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-        return redirect("/lk/users/list")
-    return render(request, "administration/edit_user.html", {"form": form, "section": "users", "table_user": user})
+            form.save_m2m()
+        return redirect("/lk/admin/users/list")
+    return render(request, "administration/edit_user.html", {"form": form, "section": "users", "table_user": user,"can_edit": True})
 
 
 @decorators.is_school_administrator
@@ -92,7 +94,7 @@ def avatar_remove(request, user):
     user = get_object_or_404(Account, pk=user)
     user.avatar = None
     user.save()
-    return redirect(f"/lk/users/{user.pk}/edit")
+    return redirect(f"/lk/admin/users/{user.pk}/edit")
 
 
 

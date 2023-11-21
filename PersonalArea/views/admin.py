@@ -28,7 +28,7 @@ def login_admin_user(request, user):
         logout(request)
         user = get_object_or_404(Account, pk=user)
         login(request, user)
-        r =  redirect("/lk/")
+        r =  redirect("/lk/choice/")
         token = get_or_generate_token(request)
         r.set_cookie('token', token)
         return r
@@ -37,19 +37,19 @@ def login_admin_user(request, user):
 @decorators.is_admin
 def user_create(request):
     if request.method == "GET":
-        return redirect("/lk/users/list/")
+        return redirect("/lk/admin/users/list/")
     else:
         form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save(commit=True)
-        return redirect("/lk/users/list/")
+        return redirect("/lk/admin/users/list/")
     return render(request, "adminpanel/user_create.html", {"form": form})
 
 @decorators.is_admin
 def user_delete(request, id):
     user = get_object_or_404(Account, pk=id)
     user.delete()
-    return redirect("/lk/users/list/")
+    return redirect("/lk/admin/users/list/")
 @decorators.is_admin
 def event_add_user(request, id, user):
     user = Account.objects.get(id=user)
@@ -57,7 +57,7 @@ def event_add_user(request, id, user):
     user.save()
     event = Events.objects.get(pk=id)
     event.volunteer.add(user)
-    return redirect(f"/lk/events/{id}/view/")
+    return redirect(f"/lk/admin/events/{id}/view/")
 
 
 @decorators.is_admin
@@ -68,7 +68,7 @@ def add_building(request):
         form = NewBuildingForm(request.POST)
         if form.is_valid():
             user = form.save(commit=True)
-        return redirect("/lk/building/list")
+        return redirect("/lk/admin/building/list")
     return render(request, "adminpanel/building_create.html", {"form": form, "section": "building"})
 
 
@@ -125,3 +125,16 @@ def category_edit(request, id):
     else:
         form = EventCategoryForm(instance=category)
         return render(request, "adminpanel/edit_category.html", {"section": "events", "form": form})
+
+@decorators.is_admin
+def index(request):
+    item = Account.objects.all().filter(points__gt=0).order_by("-points")[:10]
+    context = {
+        "users": Account.objects.all().filter(is_superuser=False).count(),
+        "events": Events.objects.all().count(),
+        "reqs": EventsMembers.objects.all().filter(is_active=False).count(),
+        "builds": Building.objects.all().count(),
+        "students": item,
+        "section": "index"
+    }
+    return render(request, "adminpanel/index.html", context)

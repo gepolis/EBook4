@@ -43,7 +43,7 @@
         var data;
         if (withClasses) {
 
-            const response = await fetch(`http://${location.host}/lk/schedule/has_month_classes/${currMonth + 1}/${currYear}`);
+            const response = await fetch(`http://${location.host}/lk/psychologist/schedule/has_month_classes/${currMonth + 1}/${currYear}`);
             var data = await response.json();
         }
         renderCalendar(data)

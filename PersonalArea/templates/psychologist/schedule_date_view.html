@@ -1,4 +1,4 @@
-{% extends "inc/base.html" %}
+{% extends "inc/psychologist_base.html" %}
 {% block content %}
     <!-- Sale & Revenue End -->
     <div class="container-fluid pt-4 px-4">
@@ -219,7 +219,7 @@
 
                 let final_data = `?date=${date_field}&start=${classesStartTime.value}&end=${classesEndTime.value}&id=${pk}`
 
-                window.open(`/lk/schedule/edit${final_data}`, "_self")
+                window.open(`/lk/psychologist/schedule/edit${final_data}`, "_self")
             }
 
         })
