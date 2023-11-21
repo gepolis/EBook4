@@ -17,7 +17,7 @@ BUILDINGS_PARALELS = {
 }
 
 DEBUG = True
-SERV = False
+SERV = True
 
 LOGIN_URL = "/auth/"
 LOGOUT_REDIRECT_URL = None
