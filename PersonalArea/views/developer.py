@@ -81,3 +81,10 @@ def drag(request):
 
 def developer(request):
     return render(request, "developer/index.html")
+
+
+def drop(request, setting, value):
+    if request.method == "POST":
+        
+    else:
+        return redirect("/lk/")

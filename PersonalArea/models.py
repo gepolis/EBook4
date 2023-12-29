@@ -2,7 +2,7 @@ import time
 
 from django.db import models
 
-from Accounts.models import Account
+from Accounts.models import Account, Role
 
 
 class Notications(models.Model):
@@ -26,3 +26,14 @@ class Message(models.Model):
 
     class Meta:
         ordering = ('date_added',)
+
+#class Widgets(models.Model):
+#    size_x = models.IntegerField()
+#    size_y = models.IntegerField()
+#    html = models.TextField(max_length=20000)
+#    for_roles = models.ManyToManyField(Role)
+
+#class CustomMainPge(models.Model):
+#    user = models.ForginKey(Account, on_delete=models.CASCADE, related_name="user")
+#    setting = models.CharField(max_length=255)
+#    widget = models.ForginKey(Widgets, on_delete=models.CASCADE, related_name="widget")

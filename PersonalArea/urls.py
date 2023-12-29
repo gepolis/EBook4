@@ -45,8 +45,7 @@ urls1 = [
     path("developer/feedbacks/<int:fb_id>/send/", views.developer.send_feedback_answer, name="send_feedback_answer"),
     path("developer/logs/", views.developer.get_logs, name="logs"),
     path("developer/drag/", views.developer.drag, name="drag"),
-    path("classroom/students/upload/", views.teacher.classroom_students_upload),
-    path("classroom/students/pdf/", views.teacher.students_list2pdf),
+
 
     path("personalisation/locations", views.personalisation.locations, name="personalisation"),
     path("personalisation/location/<int:id>", views.personalisation.location, name="location"),
@@ -68,7 +67,7 @@ urls_with_not_slash = [
     path("events/list/<str:search>", views.aam.events_list),
     path("events/archive", views.aam.events_archive_list),
     path("events/create", views.aam.event_create),
-path("events/<int:id>/photo/report/<int:image>/delete", views.aam.photo_delete),
+    path("events/<int:id>/photo/report/<int:image>/delete", views.aam.photo_delete),
 
     path("events/<int:event>/request", views.student.event_request),
     path("my/events", views.student.my_events),
@@ -116,6 +115,8 @@ teacher_urls = [
     path("teacher", views.teacher.index),
     path("teacher/classroom/student/<int:user>/view", views.teacher.classroom_view_student),
     path("teacher/classroom/student/<int:user>/export", views.other.classroom_view_export),
+    path("classroom/students/upload/", views.teacher.classroom_students_upload),
+    path("classroom/students/pdf/", views.teacher.students_list2pdf),
 
 ]
 psychologist_urls = [
