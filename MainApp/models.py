@@ -239,9 +239,7 @@ class SystemReports(models.Model):
         students_in_events_count = [i.volunteer.count() for i in events]
         students_in_events_count = sum(students_in_events_count)
         average_events_members_count = students_in_events_count/students
-        average_members_points = [i.points for i in users]
-        average_members_points = sum(average_members_points)
-        average_members_points = average_members_points/students
+        average_members_points = sum([i.points for i in users])/students
         SystemReports.objects.create(
             users_count = users.count(),
             events_count = events_count,
