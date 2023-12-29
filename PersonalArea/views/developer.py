@@ -85,6 +85,6 @@ def developer(request):
 
 def drop(request, setting, value):
     if request.method == "POST":
-        
+        pass
     else:
         return redirect("/lk/")
