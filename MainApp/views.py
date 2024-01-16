@@ -1,13 +1,12 @@
+import random
 import string
 from validate_email import validate_email
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from .forms import EventAddForm
-from .models import Events, FeedBackQuestions
-from django.contrib.auth.decorators import login_required
-from Accounts.models import Account
+from .forms import SchoolRegisterForm
+from .models import Events, FeedBackQuestions,School
 import requests
 import os
 spam_words = ["вебинар",]
@@ -25,6 +24,11 @@ def check_spam(text):
         if i in text:
             return True
     return False
+
+
+def random_char(y,chars):
+    return ''.join(random.choice(chars) for x in range(y))
+
 
 def index(request):
     return render(request, "main.html")
@@ -55,3 +59,25 @@ def feedback(request):
         else:
             return HttpResponse("Спам")
         return redirect("/")
+
+
+def register_school(request):
+    if request.method == "POST":
+        form = SchoolRegisterForm(request.POST)
+        if form.is_valid():
+            f = form.save()
+            token = f.token
+            return HttpResponse(token)
+    else:
+        form = SchoolRegisterForm()
+        num = random_char(7,"ЦУКЕНГШФЫВАПРОЛДЖЯМИТБЮ1234567890")
+        r = render(request,"school.html",{"img":num,"form":form})
+        return r
+
+
+def check_school(request,token):
+    school = School.objects.filter(token=token)
+    if school.exists():
+        return JsonResponse({"ok": True},safe=False)
+    else:
+        return JsonResponse({"ok": False}, safe=False)

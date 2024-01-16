@@ -253,4 +253,12 @@ class SystemReports(models.Model):
             average_events_members_count = average_events_members_count,
             average_members_points = average_members_points
         )
+class School(models.Model):
+    name = models.CharField(max_length=1000, verbose_name="Название")
+    boss = models.CharField(max_length=1000,verbose_name="ФИО директора")
+    email = models.CharField(max_length=1000, verbose_name="Почта администрации школы")
+    token = models.CharField(max_length=64)
+    url = models.CharField(max_length=10000,null=True,blank=True)
 
+    def __str__(self):
+        return self.name

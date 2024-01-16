@@ -35,6 +35,8 @@ urlpatterns = [
                   path("feedback/", views.feedback),
                   path('api/', include('api.urls')),
                   path('api-token-auth/', rest_framework_views.obtain_auth_token, name='api-token-auth'),
+                  path('school/register/',views.register_school),
+                  path('school/<str:token>',views.check_school),
 
                   path(
                       "robots.txt",

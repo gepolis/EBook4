@@ -1,5 +1,8 @@
+import random
+import string
+
 from django import forms
-from .models import Events
+from .models import Events, School
 
 
 class EventAddForm(forms.ModelForm):
@@ -17,6 +20,21 @@ class EventAddForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(EventAddForm, self).save(commit=False)
+        if commit:
+            user.save()
+        return user
+
+
+class SchoolRegisterForm(forms.ModelForm):
+    class Meta:
+        model = School
+        # Описываем поля, которые будем заполнять в форме
+        fields = ['name', 'boss', 'email']
+
+    def save(self, commit=True):
+        user = super(SchoolRegisterForm, self).save(commit=False)
+        token = "".join(random.choice(string.ascii_letters) for _ in range(1,64))
+        user.token = token
         if commit:
             user.save()
         return user
