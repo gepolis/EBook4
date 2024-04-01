@@ -15,7 +15,7 @@ pip install -r requirements.txt
 python3 manage.py runserver
 ```
 
-## Update script from hosting
+## **Update** script from hosting
 ```sh
 rm -r Ebook1R
 mv Ebook1 Ebook1R
